@@ -97,7 +97,7 @@ const routes = [
         component: AddPhoneNumber
       },
       {
-        path: 'editphonenumber/:idUser',
+        path: 'editphonenumber',
         name: 'EditPhoneNumber',
         component: EditPhoneNumber
       },

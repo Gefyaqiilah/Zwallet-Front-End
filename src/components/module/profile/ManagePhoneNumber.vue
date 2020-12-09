@@ -15,7 +15,7 @@
         <div class="bold gap phone-grid">
           <p class="number">{{ userData.phoneNumber }}</p>
         <div class="delete">
-          <router-link :to="'/home/editphonenumber/'+userData.id"><img src="/img/edit-2.png" alt="" /></router-link>
+          <router-link :to="'/home/editphonenumber'+'?type=primary'"><img src="/img/edit-2.png" alt="" /></router-link>
         </div>
         </div>
       </div>
@@ -23,12 +23,38 @@
     <div v-if="!userData.phoneNumber" class="details-phone-number">
       <div class="details-number">
         <div class="details-phone-title title gap">
-          <p>Primary</p>
+          <p>Add Primary Phone Number</p>
         </div>
         <div class="bold gap phone-grid">
-          <p class="number">{{ userData.phoneNumber }}</p>
+          <p class="number">Add Phone Number</p>
         <div class="delete">
-          <router-link :to="'/home/addphonenumber/'"><img src="/img/edit-2.png" alt="" /></router-link>
+          <router-link :to="'/home/addPhoneNumber'+'?type=primary'"><img src="/img/edit-2.png" alt="" /></router-link>
+        </div>
+        </div>
+      </div>
+    </div>
+    <div v-if="userData.phoneNumberSecond" class="details-phone-number">
+      <div class="details-number">
+        <div class="details-phone-title title gap">
+          <p>Secondary</p>
+        </div>
+        <div class="bold gap phone-grid">
+          <p class="number">{{ userData.phoneNumberSecond }}</p>
+        <div class="delete">
+          <router-link :to="'/home/editphonenumber'+'?type=secondary'"><img src="/img/edit-2.png" alt="" /></router-link>
+        </div>
+        </div>
+      </div>
+    </div>
+    <div v-if="!userData.phoneNumberSecond" class="details-phone-number">
+      <div class="details-number">
+        <div class="details-phone-title title gap">
+          <p>Add Secondary Phone Number</p>
+        </div>
+        <div class="bold gap phone-grid">
+          <p class="number">{{ userData.phoneNumberSecond }}</p>
+        <div class="delete">
+          <router-link :to="'/home/addPhoneNumber'+'?type=secondary'"><img src="/img/edit-2.png" alt="" /></router-link>
         </div>
         </div>
       </div>
@@ -44,6 +70,8 @@ export default {
     return {
       userData: this.token.token
     }
+  },
+  mounted () {
   }
 }
 </script>
@@ -56,11 +84,10 @@ export default {
 
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: repeat(2, max-content) max-content repeat(1, max-content);
-  grid-template-areas:
-    "change-password-title"
-    "details-phone-number"
-    "button-continue";
+  grid-template-rows: repeat(3, max-content);
+  grid-auto-rows:max-content;
+  box-sizing:content-box;
+  padding:50px;
   gap: 30px 0;
 }
 
@@ -106,13 +133,11 @@ export default {
 }
 
 .change-password-title {
-  grid-area: change-password-title;
 
   display: flex;
 }
 
 .details-phone-number {
-  grid-area: details-phone-number;
   display: grid;
   grid-template-columns:100%;
   grid-template-rows: 92px;
@@ -122,8 +147,6 @@ export default {
 
 .details-phone-number .details-number {
   grid-area: amount;
-  display: grid;
-
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
   border-radius: 10px;
   padding-top: 15px;

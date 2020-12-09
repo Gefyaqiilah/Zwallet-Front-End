@@ -16,13 +16,13 @@
                       <div class="input-group-prepend">
                           <span class="input-group-text" id="basic-addon1">+62</span>
                       </div>
-                      <input type="number" v-model="phoneNumber" id="phoneNumber" class="form-control input-border-bottom shadow-none" placeholder="Enter your phone number" value="awdaw" aria-label="Username" aria-describedby="basic-addon1">
+                      <input type="number" v-model="inputPhoneNumber" id="phoneNumber" class="form-control input-border-bottom shadow-none" placeholder="Enter your phone number" value="awdaw" aria-label="Username" aria-describedby="basic-addon1">
                   </div>
               </div>
           </div>
           <div class="row mt-5 justify-content-center">
               <div class="col-md-7 btn-login-position">
-                  <button class="change-password-btn" v-on:click.prevent="addPhoneNumber">Add Phone Number</button>
+                  <button class="change-password-btn" v-on:click.prevent="editPhoneNumber">Add Phone Number</button>
               </div>
           </div>
       </form>
@@ -38,8 +38,8 @@ export default {
   props: ['token'],
   data () {
     return {
-      phoneNumber: this.token.token.phoneNumber,
-      userData: this.token.token
+      userData: this.token.token,
+      inputPhoneNumber: this.$route.query.type === 'primary' ? this.token.token.phoneNumber : this.token.token.phoneNumberSecond
     }
   },
   methods: {
@@ -55,34 +55,27 @@ export default {
         }
       })
     },
-    async addPhoneNumber () {
+    async editPhoneNumber () {
       const id = this.userData.id
+      const dataUpdate = {}
+      if (this.$route.query.type === 'primary') {
+        dataUpdate.phoneNumber = this.inputPhoneNumber
+      } else {
+        dataUpdate.phoneNumberSecond = this.inputPhoneNumber
+      }
       try {
-        await axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/${id}`, {
-          phoneNumber: this.phoneNumber
-        }, {
-          headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('accessToken'))}` }
+        await axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/${id}`, dataUpdate, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
         })
         alert('Phone number has been updated')
         this.$router.push('/home/managephonenumber')
       } catch (error) {
-
+        console.log(error)
       }
     },
     redirect () {
       if (!localStorage.getItem('dataUser') || JSON.parse(localStorage.getItem('dataUser')).phoneNumber === null) {
         this.$router.replace('/auth/login')
-      }
-    },
-    async editPhoneNumber () {
-      try {
-        await axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/${this.$route.params.idUser}`, {
-          phoneNumber: this.phoneNumber
-        }, {
-          headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('accessToken'))}` }
-        })
-      } catch (error) {
-
       }
     }
   },

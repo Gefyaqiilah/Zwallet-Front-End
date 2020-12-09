@@ -92,19 +92,18 @@ export default {
             $('.photo').attr('src', e.target.result)
           }
           const form = new FormData()
-          console.log(document.getElementById('imageUpload').files[0])
           form.append('photo', document.getElementById('imageUpload').files[0])
           axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/photo/${id}`, form, {
             headers: {
-              Authorization: `Bearer ${JSON.parse(localStorage.getItem('accessToken'))}`,
+              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
               'Content-Type': 'multipart/form-data'
             }
           })
             .then(() => {
-              console.log('berhasil')
+              alert('photo has been changed successfully')
             })
             .catch(() => {
-              console.log('gagal')
+              alert('photo has failed to change')
             })
         }
         reader.readAsDataURL(this.files[0])
@@ -113,7 +112,6 @@ export default {
   },
   mounted () {
     this.updateImage()
-    console.log('dibawah ini token')
   }
 }
 </script>

@@ -81,7 +81,7 @@ export default {
           email: this.email,
           password: this.password
         })
-        .then(async results => {
+        .then(results => {
           if (results.status === 200) {
             const accessToken = results.data.result.accessToken
             const refreshToken = results.data.result.refreshToken

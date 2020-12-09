@@ -9,7 +9,7 @@
       <div class="history">
           <div v-for="transferTransaction in dataTransfer" :key="transferTransaction.idTransfer" class="transaction col-md-12">
               <div class="detail-photo">
-              <img class="photo" :src="transferTransaction.photo === null? '/img/user-avatar.png' :transferTransaction.photo" alt="">
+              <img class="transaction-photo" :src="transferTransaction.photo === null? '/img/user-avatar.png' :transferTransaction.photo" alt="">
               </div>
               <div class="detail-name">
                   <p class="name">{{transferTransaction.Receiver}}</p>
@@ -120,7 +120,7 @@ export default {
   width:55px;
   height:55px;
 }
-.photo{
+.transaction-photo{
   width:100%;
   height:100%;
   border-radius:10px;

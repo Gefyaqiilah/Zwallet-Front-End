@@ -57,12 +57,17 @@ export default {
     },
     async addPhoneNumber () {
       const id = this.userData.id
+      const dataUpdate = {}
+      if (this.$route.query.type === 'primary') {
+        dataUpdate.phoneNumber = this.phoneNumber
+      } else {
+        dataUpdate.phoneNumberSecond = this.phoneNumber
+      }
       try {
-        await axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/${id}`, {
-          phoneNumber: this.phoneNumber
-        }, {
-          headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('accessToken'))}` }
+        await axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/${id}`, dataUpdate, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
         })
+        alert('Phone number has been successfully added')
         this.$router.replace('/home')
       } catch (error) {
         console.log(error)
@@ -76,7 +81,7 @@ export default {
   },
   mounted () {
     this.detectInputInserted()
-    this.redirect()
+    // this.redirect()
   }
 }
 </script>

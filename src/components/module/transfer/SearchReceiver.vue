@@ -56,17 +56,13 @@ export default {
   methods: {
     async fetchReceiver () {
       const fetchReceiver = await axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/users?page=${this.page}`)
-      this.userReceiver.push(...fetchReceiver.data.result)
+      this.userReceiver.push(...fetchReceiver.data.result.users)
     },
     async searchReceiver () {
-      console.log('enter')
-      console.log(this.search)
       try {
         const searchReceiver = await axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/users/search?firstName=${this.search}`)
-        console.log(searchReceiver.data.result)
         this.searchUser = searchReceiver.data.result
       } catch (error) {
-        console.log('error')
         console.log(error)
       }
     },
