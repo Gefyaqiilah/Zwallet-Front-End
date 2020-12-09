@@ -9,7 +9,7 @@
         <div class="input-group-prepend">
             <span class="input-group-text" id="basic-addon1"><img src="/img/search.png" alt=""></span>
           </div>
-          <input type="text" v-model="search" class="form-control search-input-text shadow-none" placeholder="Search firstname receiver in here" aria-label="Username" aria-describedby="basic-addon1">
+          <input type="text" v-model="search" @keyup.enter="searchReceiver" class="form-control search-input-text shadow-none" placeholder="Search firstname receiver in here and PRESS ENTER" aria-label="Username" aria-describedby="basic-addon1">
           </div>
       </div>
   <div v-if="!search" class="list-receiver">
@@ -47,6 +47,7 @@ export default {
   data: () => {
     return {
       search: '',
+      searchUser: [],
       userReceiver: [],
       toggleSort: true,
       page: 1
@@ -54,8 +55,20 @@ export default {
   },
   methods: {
     async fetchReceiver () {
-      const fetchReceiver = await axios.get(`${process.env.VUE_APP_SERVICE_API}/users?page=${this.page}`)
+      const fetchReceiver = await axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/users?page=${this.page}`)
       this.userReceiver.push(...fetchReceiver.data.result)
+    },
+    async searchReceiver () {
+      console.log('enter')
+      console.log(this.search)
+      try {
+        const searchReceiver = await axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/users/search?firstName=${this.search}`)
+        console.log(searchReceiver.data.result)
+        this.searchUser = searchReceiver.data.result
+      } catch (error) {
+        console.log('error')
+        console.log(error)
+      }
     },
     handleScrolledBottom (isVisible) {
       if (isVisible) {
@@ -67,9 +80,6 @@ export default {
       if (!localStorage.getItem('dataUser')) {
         this.$router.replace('/auth/login')
       }
-    },
-    infiniteHandler ($state) {
-      axios.get(`${process.env.VUE_APP_SERVICE_API}/users?page=`)
     },
     sortByName () {
       if (this.toggleSort) {
@@ -94,11 +104,6 @@ export default {
     this.redirect()
   },
   computed: {
-    searchUser () {
-      return this.userReceiver.filter((user) => {
-        return user.firstName.match(this.search)
-      })
-    }
   }
 }
 </script>

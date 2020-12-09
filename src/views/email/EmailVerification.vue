@@ -11,7 +11,7 @@ export default {
   name: 'Email Verification',
   methods: {
     emailVerification () {
-      return axios.patch(`${process.env.VUE_APP_SERVICE_API}/email/emailverification`, {
+      return axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/email/emailverification`, {
         email: `${this.$route.params.email}`
       })
         .then(results => {
@@ -22,7 +22,7 @@ export default {
         })
     },
     checkEmailVerified () {
-      return axios.get(`${process.env.VUE_APP_SERVICE_API}/email/checkEmailVerified`, {
+      return axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/email/checkEmailVerified`, {
         headers: {
           email: `${this.$route.params.email}`
         }

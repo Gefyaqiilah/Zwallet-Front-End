@@ -44,7 +44,7 @@ export default {
       }
     },
     fetchToken () {
-      return axios.post(`${process.env.VUE_APP_SERVICE_API}/users/token`, {
+      return axios.post(`${process.env.VUE_APP_SERVICE_API}/v1/users/token`, {
         token: localStorage.getItem('refreshToken')
       })
         .then(results => {
@@ -84,8 +84,7 @@ export default {
   },
   mounted () {
     this.redirect()
-    this.fetchToken()
-    this.timer = setInterval(this.fetchToken, 5000)
+    // this.timer = setInterval(this.fetchToken, 5000)
   },
   computed: {
     convert () {
@@ -94,11 +93,6 @@ export default {
     // eslint-disable-next-line vue/return-in-computed-property
     sendToken () {
       return { token: JSON.parse(this.token) }
-      // if (this.$route.name === 'HomeComponent') { return { token: JSON.parse(this.token) } }
-      // if (this.$route.name === 'PersonalInformation') { return { token: JSON.parse(this.token) } }
-      // if (this.$route.name === 'AddPhoneNumber') { return { token: JSON.parse(this.token) } }
-      // if (this.$route.name === 'ManagePhoneNumber') { return { token: JSON.parse(this.token) } }
-      // if (this.$route.name === 'EditPhoneNumber') { return { token: JSON.parse(this.token) } }
     },
     getToken: {
       get: function () {

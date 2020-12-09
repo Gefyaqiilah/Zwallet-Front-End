@@ -47,8 +47,8 @@ export default {
   props: ['token', 'styling'],
   methods: {
     logOut () {
-      return axios.post(`${process.env.VUE_APP_SERVICE_API}/users/logout`, {}, {
-        headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('accessToken'))}` }
+      return axios.post(`${process.env.VUE_APP_SERVICE_API}/v1/users/logout`, {}, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       })
         .then(results => {
           localStorage.removeItem('accessToken')

@@ -13,12 +13,6 @@
             alt=""
           />
         </div>
-        <form
-          id="formUpdateImage"
-          :action="'http://52.91.104.119:4000/users/photo/'+this.token.token.id"
-          method="POST"
-          enctype="multipart/form-data"
-        >
           <input
             style="display:none;"
             id="imageUpload"
@@ -29,7 +23,6 @@
           <label style="display:block;display:flex;justify-content:center;" for="imageUpload"
             ><img src="/img/edit-2.png" alt="" id="" /><span style="">Edit</span></label
           >
-        </form>
       </div>
       <div class="profile-name">
         <h1>{{this.token.token.firstName}}</h1>
@@ -79,39 +72,48 @@
 
 <script>
 import $ from 'jquery'
+import axios from 'axios'
 export default {
   name: 'Profile',
   props: ['token'],
+  data () {
+    return {
+      userData: this.token,
+      id: this.token.token.id
+    }
+  },
   methods: {
     updateImage () {
+      const id = this.id
       $('#imageUpload').change(function () {
         if (this.files && this.files[0]) {
           var reader = new FileReader()
           reader.onload = function (e) {
             $('.photo').attr('src', e.target.result)
           }
-          document.getElementById('formUpdateImage').submit()
-          // $('#formUpdateImage').submit(function (event) {
-          //   console.log('update....')
-          //   event.preventDefault()
-          // })
+          const form = new FormData()
+          console.log(document.getElementById('imageUpload').files[0])
+          form.append('photo', document.getElementById('imageUpload').files[0])
+          axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/photo/${id}`, form, {
+            headers: {
+              Authorization: `Bearer ${JSON.parse(localStorage.getItem('accessToken'))}`,
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+            .then(() => {
+              console.log('berhasil')
+            })
+            .catch(() => {
+              console.log('gagal')
+            })
         }
         reader.readAsDataURL(this.files[0])
       })
-    },
-    readImgAndUpload (input) {
-      if (input.files && input.files[0]) {
-        var reader = new FileReader()
-        reader.onload = function (e) {
-          $('.photo').attr('src', e.target.result)
-        }
-        document.getElementById('formUpdateImage').submit()
-      }
-      reader.readAsDataURL(input.files[0])
     }
   },
   mounted () {
     this.updateImage()
+    console.log('dibawah ini token')
   }
 }
 </script>

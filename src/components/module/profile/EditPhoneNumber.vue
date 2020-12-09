@@ -58,7 +58,7 @@ export default {
     async addPhoneNumber () {
       const id = this.userData.id
       try {
-        await axios.patch(`${process.env.VUE_APP_SERVICE_API}/users/${id}`, {
+        await axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/${id}`, {
           phoneNumber: this.phoneNumber
         }, {
           headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('accessToken'))}` }
@@ -76,7 +76,7 @@ export default {
     },
     async editPhoneNumber () {
       try {
-        await axios.patch(`${process.env.VUE_APP_SERVICE_API}/users/${this.$route.params.idUser}`, {
+        await axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/${this.$route.params.idUser}`, {
           phoneNumber: this.phoneNumber
         }, {
           headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('accessToken'))}` }

@@ -37,7 +37,7 @@ export default {
   methods: {
     async fetchTransactionTransfers () {
       try {
-        const resultsFetchTransfers = await axios.get(`${process.env.VUE_APP_SERVICE_API}/transfers/search?firstName=${this.firstName}&type=transfers&page=1&limit=4`, { headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('accessToken'))}` } })
+        const resultsFetchTransfers = await axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/transfers/search?firstName=${this.firstName}&type=transfers&page=1&limit=4`, { headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` } })
         this.dataTransfer.push(...resultsFetchTransfers.data.result)
       } catch (error) {
         console.log(error)
@@ -45,7 +45,9 @@ export default {
     },
     async deleteTransaction (cek) {
       try {
-        await axios.delete(`${process.env.VUE_APP_SERVICE_API}/transfers/${cek}`)
+        await axios.delete(`${process.env.VUE_APP_SERVICE_API}/v1/transfers/${cek}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
+        })
         alert('deleted successfully')
         const filter = this.dataTransfer.filter((data) => data.idTransfer !== cek)
         this.dataTransfer = filter
