@@ -49,8 +49,8 @@ export default {
     ...mapActions(['logOut']),
     handleLogOut () {
       this.logOut()
+      this.$router.push('/auth')
       alert('Logout successfull')
-      this.$router.replace('/auth/login')
     },
     toHome () {
       this.$router.push('/auth')

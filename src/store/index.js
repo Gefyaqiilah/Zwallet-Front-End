@@ -9,7 +9,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    userData: {},
+    userData: null,
     accessToken: null || localStorage.getItem('accessToken'),
     refreshToken: null || localStorage.getItem('refreshToken')
   },
@@ -18,6 +18,13 @@ export default new Vuex.Store({
       state.userData = payload
       state.accessToken = payload.accessToken
       state.refreshToken = payload.refreshToken
+    },
+    REMOVE_USERDATA(state, payload) {
+      state.userData = null
+    },
+    REMOVE_ALLTOKEN(state) {
+      state.accessToken = null
+      state.refreshToken = null
     }
   },
   actions: {
@@ -42,10 +49,12 @@ export default new Vuex.Store({
           })
       })
     },
-    logOut() {
+    logOut(context) {
       localStorage.removeItem('accessToken')
       localStorage.removeItem('refreshToken')
       localStorage.removeItem('dataUser')
+      context.commit('REMOVE_USERDATA')
+      context.commit('REMOVE_ALLTOKEN')
     },
     interceptorRequest() {
       axios.interceptors.request.use(function (config) {
@@ -68,6 +77,10 @@ export default new Vuex.Store({
           }
         } else if (errorStatus === 500) {
           alert('Oops! Sorry Looks like server having trouble')
+        } else if (errorStatus === 401) {
+          if (errorMessage === 'Access Token expired') {
+
+          }
         }
         return Promise.reject(error)
       })
