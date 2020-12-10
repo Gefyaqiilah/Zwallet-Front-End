@@ -7,7 +7,7 @@
     <div v-for="user in userReceiver" :key="user.id" class="transfer-to-user">
       <div class="receiver">
           <div class="thumbnail-photo">
-              <img class="photo" :src="user.photo" :alt="user.firstName">
+              <img class="photo" :src="user.photo === null ? '/img/user-avatar.png':user.photo" :alt="user.firstName">
           </div>
           <div class="detail-username">
               <p class="username">{{user.firstName}}</p>
@@ -73,6 +73,7 @@ export default {
         const dataReceiver = await axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/users/${this.$route.params.idUser}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
         })
+        console.log(dataReceiver.data.result)
         this.userReceiver.push(...dataReceiver.data.result)
       } catch (error) {
         console.log(error)

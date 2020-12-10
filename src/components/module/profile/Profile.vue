@@ -101,12 +101,12 @@ export default {
           })
             .then(() => {
               alert('photo has been changed successfully')
+              reader.readAsDataURL(this.files[0])
             })
             .catch(() => {
               alert('photo has failed to change')
             })
         }
-        reader.readAsDataURL(this.files[0])
       })
     }
   },

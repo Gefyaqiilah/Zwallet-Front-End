@@ -101,9 +101,6 @@ export default {
       }
     }
   },
-  updated () {
-    this.token = JSON.parse(localStorage.getItem('dataUser'))
-  },
   beforeDestroy () {
     clearInterval(this.timer)
   }
