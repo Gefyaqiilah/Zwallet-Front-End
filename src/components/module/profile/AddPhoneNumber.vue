@@ -39,7 +39,7 @@ export default {
   data () {
     return {
       phoneNumber: '',
-      userData: this.token.token
+      userData: this.token
     }
   },
   methods: {

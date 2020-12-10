@@ -6,9 +6,9 @@
           <img
             class="photo"
             :src="
-              this.token.token.photo === null
+              this.token.photo === null
                 ? '/img/user-avatar.png'
-                : this.token.token.photo
+                : this.token.photo
             "
             alt=""
           />
@@ -25,8 +25,8 @@
           >
       </div>
       <div class="profile-name">
-        <h1>{{this.token.token.firstName}}</h1>
-        <p>{{this.token.token.phoneNumber}}</p>
+        <h1>{{this.token.firstName}}</h1>
+        <p>{{this.token.phoneNumber}}</p>
       </div>
     </div>
     <div class="profile-menu">
@@ -79,7 +79,7 @@ export default {
   data () {
     return {
       userData: this.token,
-      id: this.token.token.id
+      id: this.token.id
     }
   },
   methods: {

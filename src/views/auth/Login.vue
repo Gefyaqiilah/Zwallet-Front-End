@@ -53,7 +53,7 @@
         <p>Forgot password?</p>
       </div>
       <div class="col-md-9 btn-login-position">
-        <button v-on:click.prevent="userLogin" class="btn-login">Login</button>
+        <button v-on:click.prevent="handleLogin" class="btn-login">Login</button>
       </div>
       <div class="col-md-9 signup-position">
         <p>Don’t have an account? Let’s <span class="signup">Sign Up</span></p>
@@ -64,8 +64,7 @@
 
 <script>
 import $ from 'jquery'
-import axios from 'axios'
-import jwt from 'jsonwebtoken'
+import { mapActions } from 'vuex'
 export default {
   name: 'Login',
   data () {
@@ -75,26 +74,20 @@ export default {
     }
   },
   methods: {
-    userLogin () {
-      axios
-        .post(`${process.env.VUE_APP_SERVICE_API}/v1/users/login`, {
-          email: this.email,
-          password: this.password
+    ...mapActions(['login']),
+    handleLogin () {
+      const payload = {
+        email: this.email,
+        password: this.password
+      }
+      this.login(payload)
+        .then(res => {
+          alert('Login successful')
+          this.$router.push('/home')
         })
-        .then(results => {
-          if (results.status === 200) {
-            const accessToken = results.data.result.accessToken
-            const refreshToken = results.data.result.refreshToken
-            const decoded = jwt.verify(accessToken, process.env.VUE_APP_JWT_KEY)
-            localStorage.setItem('dataUser', JSON.stringify(decoded))
-            localStorage.setItem('refreshToken', refreshToken)
-            localStorage.setItem('accessToken', accessToken)
-            alert('Login successful')
-            this.$router.push('/home')
-          }
-        })
-        .catch(() => {
-          alert('Looks like server having trouble')
+        .catch(err => {
+          console.log(err)
+          alert(err.response.data.error.message)
         })
     },
     detectInputInserted () {

@@ -54,7 +54,7 @@ export default {
   props: ['token'],
   data () {
     return {
-      userData: this.token.token
+      userData: this.token
     }
   },
   mounted () {

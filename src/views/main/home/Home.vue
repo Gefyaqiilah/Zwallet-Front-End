@@ -19,12 +19,13 @@ import Menu from '@/components/module/Menu'
 import Footer from '@/components/module/Footer'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Home',
   data () {
     return {
-      token: localStorage.getItem('dataUser') || null,
+      token: JSON.parse(localStorage.getItem('dataUser')) || null,
       timer: '',
       renderComponent: true,
       firstName: JSON.parse(localStorage.getItem('dataUser')).firstName
@@ -87,16 +88,13 @@ export default {
     // this.timer = setInterval(this.fetchToken, 5000)
   },
   computed: {
-    convert () {
-      return JSON.parse(this.token)
-    },
-    // eslint-disable-next-line vue/return-in-computed-property
+    ...mapGetters(['getUserData']),
     sendToken () {
-      return { token: JSON.parse(this.token) }
+      return this.token
     },
     getToken: {
       get: function () {
-        return JSON.parse(this.token)
+        return this.token
       },
       set: function () {
         this.token = JSON.parse(localStorage.getItem('dataUser'))
@@ -104,7 +102,7 @@ export default {
     }
   },
   updated () {
-    this.token = localStorage.getItem('dataUser')
+    this.token = JSON.parse(localStorage.getItem('dataUser'))
   },
   beforeDestroy () {
     clearInterval(this.timer)

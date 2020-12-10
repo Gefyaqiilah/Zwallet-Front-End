@@ -19,7 +19,7 @@ export default {
   },
   data () {
     return {
-      userData: this.token.token
+      userData: this.token
     }
   },
   props: ['token'],

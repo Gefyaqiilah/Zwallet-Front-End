@@ -38,8 +38,8 @@ export default {
   props: ['token'],
   data () {
     return {
-      userData: this.token.token,
-      inputPhoneNumber: this.$route.query.type === 'primary' ? this.token.token.phoneNumber : this.token.token.phoneNumberSecond
+      userData: this.token,
+      inputPhoneNumber: this.$route.query.type === 'primary' ? this.token.phoneNumber : this.token.phoneNumberSecond
     }
   },
   methods: {
