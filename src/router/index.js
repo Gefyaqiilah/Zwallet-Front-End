@@ -22,6 +22,7 @@ import AddPhoneNumber from '@/components/module/profile/AddPhoneNumber'
 import EditPhoneNumber from '@/components/module/profile/EditPhoneNumber'
 import ManagePhoneNumber from '@/components/module/profile/ManagePhoneNumber'
 import EmailVerification from '@/views/email/EmailVerification'
+import store from '@/store/index'
 Vue.use(VueRouter)
 
 const routes = [
@@ -35,6 +36,7 @@ const routes = [
     name: 'Home',
     component: Home,
     redirect: '/home/home',
+    meta: { requiresAuth: true },
     children: [
       {
         path: 'home',
@@ -113,6 +115,7 @@ const routes = [
     name: 'Auth',
     component: Auth,
     redirect: '/auth/login',
+    meta: { requiresVisitor: true },
     children: [
       {
         path: 'login',
@@ -149,4 +152,27 @@ const router = new VueRouter({
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    if (!store.getters.isLogin) {
+      next({
+        path: 'auth/login'
+      })
+    } else {
+      next()
+    }
+  } else if (to.matched.some(record => record.meta.requiresVisitor)) {
+    if (store.getters.isLogin) {
+      next({
+        path: '/home/home'
+      })
+    } else {
+      next()
+    }
+  } else {
+    next() // make sure to always call next()!
+  }
+})
 export default router

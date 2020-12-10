@@ -63,11 +63,6 @@ export default {
     }
   },
   methods: {
-    redirect () {
-      if (!localStorage.getItem('dataUser')) {
-        this.$router.replace('/auth/login')
-      }
-    },
     async getReceiver () {
       try {
         const dataReceiver = await axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/users/${this.$route.params.idUser}`)
@@ -100,7 +95,6 @@ export default {
     }
   },
   mounted () {
-    this.redirect()
     this.getReceiver()
   },
   computed: {

@@ -154,16 +154,10 @@ export default {
       this.username = ''
       this.password = ''
       this.email = ''
-    },
-    redirect () {
-      if (localStorage.getItem('dataUser')) {
-        this.$router.push('/home')
-      }
     }
   },
   mounted () {
     this.detectInputInserted()
-    this.redirect()
   }
 }
 </script>

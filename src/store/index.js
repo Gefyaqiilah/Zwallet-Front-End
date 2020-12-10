@@ -42,6 +42,11 @@ export default new Vuex.Store({
           })
       })
     },
+    logOut() {
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('refreshToken')
+      localStorage.removeItem('dataUser')
+    },
     interceptorRequest() {
       axios.interceptors.request.use(function (config) {
         axios.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem('accessToken')}`
@@ -71,6 +76,9 @@ export default new Vuex.Store({
   getters: {
     getUserData(state) {
       return state.userData
+    },
+    isLogin(state) {
+      return state.accessToken !== null && state.refreshToken !== null
     }
   },
   modules: {

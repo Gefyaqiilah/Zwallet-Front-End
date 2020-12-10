@@ -62,17 +62,7 @@
 
 <script>
 export default {
-  name: 'StatusSucceed',
-  methods: {
-    redirect () {
-      if (!localStorage.getItem('dataUser')) {
-        this.$router.replace('/auth/login')
-      }
-    }
-  },
-  mounted () {
-    this.redirect()
-  }
+  name: 'StatusSucceed'
 }
 </script>
 

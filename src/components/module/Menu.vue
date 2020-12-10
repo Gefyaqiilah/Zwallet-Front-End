@@ -23,7 +23,7 @@
               <div class="menu-name"><router-link class="color-text" to="/home/profile">Profile</router-link></div>
 
           </div>
-          <div class="menu-logout" :style="styling" v-if="Object.keys(userData).length > 0" v-on:click.prevent="logOut">
+          <div class="menu-logout" :style="styling" v-if="Object.keys(userData).length > 0" v-on:click.prevent="handleLogOut">
               <div class="location"></div>
               <div class=""><img src="/img/icon-menu-log-out.png" class="menu-icon" alt=""></div>
               <div class="menu-name">Logout</div>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { mapActions } from 'vuex'
 export default {
   name: 'Menu',
   data () {
@@ -46,20 +46,11 @@ export default {
   },
   props: ['token', 'styling'],
   methods: {
-    logOut () {
-      return axios.post(`${process.env.VUE_APP_SERVICE_API}/v1/users/logout`, {}, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-      })
-        .then(results => {
-          localStorage.removeItem('accessToken')
-          localStorage.removeItem('refreshToken')
-          localStorage.removeItem('dataUser')
-          alert('Logout successfull')
-          this.$router.replace('/auth/login')
-        })
-        .catch(() => {
-          alert('Failed to logout')
-        })
+    ...mapActions(['logOut']),
+    handleLogOut () {
+      this.logOut()
+      alert('Logout successfull')
+      this.$router.replace('/auth/login')
     },
     toHome () {
       this.$router.push('/auth')

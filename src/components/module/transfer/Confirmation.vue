@@ -68,15 +68,7 @@ export default {
   methods: {
     showModalPin () {
       this.$refs.modal.showModalPin()
-    },
-    redirect () {
-      if (!localStorage.getItem('dataUser')) {
-        this.$router.replace('/auth/login')
-      }
     }
-  },
-  mounted () {
-    this.redirect()
   }
 }
 </script>

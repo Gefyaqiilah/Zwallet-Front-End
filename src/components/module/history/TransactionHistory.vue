@@ -70,17 +70,7 @@
 
 <script>
 export default {
-  name: 'TransactionHistory',
-  methods: {
-    redirect () {
-      if (!localStorage.getItem('dataUser')) {
-        this.$router.replace('/auth/login')
-      }
-    }
-  },
-  mounted () {
-    this.redirect()
-  }
+  name: 'TransactionHistory'
 }
 </script>
 

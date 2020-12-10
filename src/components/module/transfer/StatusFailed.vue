@@ -61,17 +61,7 @@
 
 <script>
 export default {
-  name: 'StatusFailed',
-  methods: {
-    redirect () {
-      if (!localStorage.getItem('dataUser')) {
-        this.$router.replace('/auth/login')
-      }
-    }
-  },
-  mounted () {
-    this.redirect()
-  }
+  name: 'StatusFailed'
 }
 </script>
 

@@ -72,11 +72,6 @@ export default {
         this.fetchReceiver()
       }
     },
-    redirect () {
-      if (!localStorage.getItem('dataUser')) {
-        this.$router.replace('/auth/login')
-      }
-    },
     sortByName () {
       if (this.toggleSort) {
         this.userReceiver.sort((a, b) => {
@@ -97,7 +92,6 @@ export default {
   },
   mounted () {
     this.fetchReceiver()
-    this.redirect()
   },
   computed: {
   }

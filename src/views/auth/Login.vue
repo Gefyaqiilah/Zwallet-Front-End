@@ -101,11 +101,6 @@ export default {
         }
       })
     },
-    redirect () {
-      if (localStorage.getItem('dataUser')) {
-        this.$router.push('/home')
-      }
-    },
     showPassword () {
       const inputPassword = document.getElementById('password')
       if (inputPassword.type === 'password') {
@@ -117,7 +112,6 @@ export default {
   },
   mounted () {
     this.detectInputInserted()
-    this.redirect()
   }
 }
 </script>

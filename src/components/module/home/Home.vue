@@ -22,17 +22,7 @@ export default {
       userData: this.token
     }
   },
-  props: ['token'],
-  mounted () {
-    this.redirect()
-  },
-  methods: {
-    redirect () {
-      if (!localStorage.getItem('dataUser')) {
-        this.$router.replace('/auth/login')
-      }
-    }
-  }
+  props: ['token']
 }
 </script>
 

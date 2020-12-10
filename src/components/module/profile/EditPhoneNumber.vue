@@ -70,16 +70,10 @@ export default {
       } catch (error) {
         console.log(error)
       }
-    },
-    redirect () {
-      if (!localStorage.getItem('dataUser') || JSON.parse(localStorage.getItem('dataUser')).phoneNumber === null) {
-        this.$router.replace('/auth/login')
-      }
     }
   },
   mounted () {
     this.detectInputInserted()
-    this.redirect()
   }
 }
 </script>

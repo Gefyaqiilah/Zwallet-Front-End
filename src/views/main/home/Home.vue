@@ -76,15 +76,9 @@ export default {
         .catch(() => {
           clearInterval(this.timer)
         })
-    },
-    redirect () {
-      if (!localStorage.getItem('accessToken')) {
-        return this.$router.push('/auth/login')
-      }
     }
   },
   mounted () {
-    this.redirect()
     // this.timer = setInterval(this.fetchToken, 5000)
   },
   computed: {
