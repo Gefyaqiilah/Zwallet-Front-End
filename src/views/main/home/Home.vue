@@ -25,7 +25,7 @@ export default {
   name: 'Home',
   data () {
     return {
-      token: JSON.parse(localStorage.getItem('dataUser')) || null,
+      token: JSON.parse(localStorage.getItem('dataUser')),
       timer: '',
       renderComponent: true,
       firstName: JSON.parse(localStorage.getItem('dataUser')).firstName

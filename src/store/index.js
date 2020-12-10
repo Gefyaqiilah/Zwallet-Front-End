@@ -38,7 +38,6 @@ export default new Vuex.Store({
             resolve(results)
           })
           .catch(error => {
-            console.log(error)
             reject(error)
           })
       })
@@ -53,7 +52,20 @@ export default new Vuex.Store({
       })
     },
     interceptorResponse() {
-
+      axios.interceptors.response.use(function (response) {
+        return response
+      }, function (error) {
+        const errorStatus = error.response.data.status
+        const errorMessage = error.response.data.err.message
+        if (errorStatus === 404) {
+          if (errorMessage === 'Email or password you entered is incorrect.') {
+            alert('Email or password invalid')
+          }
+        } else if (errorStatus === 500) {
+          alert('Oops! Sorry Looks like server having trouble')
+        }
+        return Promise.reject(error)
+      })
     }
   },
   getters: {
