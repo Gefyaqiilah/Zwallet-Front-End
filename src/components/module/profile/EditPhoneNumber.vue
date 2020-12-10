@@ -64,9 +64,7 @@ export default {
         dataUpdate.phoneNumberSecond = this.inputPhoneNumber
       }
       try {
-        await axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/${id}`, dataUpdate, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-        })
+        await axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/${id}`, dataUpdate)
         alert('Phone number has been updated')
         this.$router.push('/home/managephonenumber')
       } catch (error) {

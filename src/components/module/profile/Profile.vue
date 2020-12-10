@@ -95,13 +95,12 @@ export default {
           form.append('photo', document.getElementById('imageUpload').files[0])
           axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/photo/${id}`, form, {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
               'Content-Type': 'multipart/form-data'
             }
           })
             .then(() => {
-              alert('photo has been changed successfully')
               reader.readAsDataURL(this.files[0])
+              alert('photo has been changed successfully')
             })
             .catch(() => {
               alert('photo has failed to change')

@@ -8,8 +8,15 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'bootstrap/dist/js/bootstrap.js'
+import { mapActions } from 'vuex'
 export default {
-
+  name: 'App',
+  methods: {
+    ...mapActions(['interceptorRequest'])
+  },
+  created () {
+    this.interceptorRequest()
+  }
 }
 </script>
 

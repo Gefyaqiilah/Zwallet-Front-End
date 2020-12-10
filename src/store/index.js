@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* eslint-disable space-before-function-paren */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -43,7 +44,13 @@ export default new Vuex.Store({
       })
     },
     interceptorRequest() {
-
+      axios.interceptors.request.use(function (config) {
+        axios.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem('accessToken')}`
+        return config
+      }, function (error) {
+        console.log(error)
+        return Promise.reject(error)
+      })
     },
     interceptorResponse() {
 

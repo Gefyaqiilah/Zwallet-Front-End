@@ -64,9 +64,7 @@ export default {
         dataUpdate.phoneNumberSecond = this.phoneNumber
       }
       try {
-        await axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/${id}`, dataUpdate, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-        })
+        await axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/${id}`, dataUpdate)
         alert('Phone number has been successfully added')
         this.$router.replace('/home')
       } catch (error) {

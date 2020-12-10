@@ -70,9 +70,7 @@ export default {
     },
     async getReceiver () {
       try {
-        const dataReceiver = await axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/users/${this.$route.params.idUser}`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-        })
+        const dataReceiver = await axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/users/${this.$route.params.idUser}`)
         console.log(dataReceiver.data.result)
         this.userReceiver.push(...dataReceiver.data.result)
       } catch (error) {
@@ -91,12 +89,12 @@ export default {
           notes: this.inputNotes
         }
         try {
-          await axios.post(`${process.env.VUE_APP_SERVICE_API}/v1/transfers`, data, {
-            headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-          })
+          await axios.post(`${process.env.VUE_APP_SERVICE_API}/v1/transfers`, data)
           alert('Transfer successfully !')
         } catch (error) {
-          console.log(error)
+          if (error.response.data.err.message === 'Sender Balance is not enough for transfer') {
+            alert('Your Balance is not enough for transfers')
+          }
         }
       }
     }
