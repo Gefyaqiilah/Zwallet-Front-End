@@ -4,7 +4,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
-
+import router from '../router'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -25,6 +25,11 @@ export default new Vuex.Store({
     REMOVE_ALLTOKEN(state) {
       state.accessToken = null
       state.refreshToken = null
+    },
+    REMOVE_ALL_LOCAL_STORAGE(state) {
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('refreshToken')
+      localStorage.removeItem('dataUser')
     }
   },
   actions: {
@@ -50,22 +55,22 @@ export default new Vuex.Store({
       })
     },
     logOut(context) {
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('refreshToken')
-      localStorage.removeItem('dataUser')
+      context.commit('REMOVE_ALL_LOCAL_STORAGE')
       context.commit('REMOVE_USERDATA')
       context.commit('REMOVE_ALLTOKEN')
     },
-    interceptorRequest() {
+    getNewAccessToken() {
+
+    },
+    interceptorRequest(context) {
       axios.interceptors.request.use(function (config) {
         axios.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem('accessToken')}`
         return config
       }, function (error) {
-        console.log(error)
         return Promise.reject(error)
       })
     },
-    interceptorResponse() {
+    interceptorResponse(context) {
       axios.interceptors.response.use(function (response) {
         return response
       }, function (error) {
@@ -79,7 +84,45 @@ export default new Vuex.Store({
           alert('Oops! Sorry Looks like server having trouble')
         } else if (errorStatus === 401) {
           if (errorMessage === 'Access Token expired') {
-
+            // get new accesstoken
+            if (!localStorage.getItem('refreshToken')) {
+              context.commit('REMOVE_USERDATA')
+              context.commit('REMOVE_ALLTOKEN')
+              context.commit('REMOVE_ALL_LOCAL_STORAGE')
+              return router.push('/auth/login')
+            }
+            axios.post(`${process.env.VUE_APP_SERVICE_API}/v1/users/token`, {
+              token: localStorage.getItem('refreshToken')
+            })
+              .then(results => {
+                const accessToken = results.data.result.accessToken
+                const config = error.config
+                config.headers.Authorization = `Bearer ${accessToken}`
+                console.log(config)
+                // request again
+                axios.request(config)
+                  .then(() => {
+                    localStorage.setItem('accessToken', accessToken)
+                  })
+                  .catch(() => {
+                    alert('Looks like server having trouble')
+                  })
+              })
+              .catch(() => {
+                alert('server error')
+              })
+          } else if (errorMessage === 'Invalid Token') {
+            context.commit('REMOVE_USERDATA')
+            context.commit('REMOVE_ALLTOKEN')
+            context.commit('REMOVE_ALL_LOCAL_STORAGE')
+            router.push('/auth/login')
+          } else if (errorMessage === 'Forbidden: Token cannot be empty') {
+            context.commit('REMOVE_USERDATA')
+            context.commit('REMOVE_ALLTOKEN')
+            context.commit('REMOVE_ALL_LOCAL_STORAGE')
+            router.push('/auth/login')
+          } else if (errorMessage === 'email must be verified first, check the email we have sent') {
+            alert('sorry your email has not been verified, please verify it first')
           }
         }
         return Promise.reject(error)

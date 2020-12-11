@@ -25,6 +25,7 @@
 
 <script>
 import axios from 'axios'
+import { mapMutations } from 'vuex'
 export default {
   name: 'TransactionHistory',
   data () {
@@ -35,6 +36,7 @@ export default {
   },
   props: ['firstName'],
   methods: {
+    ...mapMutations(['REMOVE_USERDATA', 'REMOVE_ALLTOKEN', 'REMOVE_ALL_LOCAL_STORAGE']),
     async fetchTransactionTransfers () {
       try {
         const resultsFetchTransfers = await axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/transfers/search?firstName=${this.firstName}&type=transfers&page=1&limit=4`, { headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` } })
@@ -44,6 +46,12 @@ export default {
       }
     },
     async deleteTransaction (cek) {
+      if (!localStorage.getItem('accessToken')) {
+        this.REMOVE_USERDATA()
+        this.REMOVE_ALLTOKEN()
+        this.REMOVE_ALL_LOCAL_STORAGE()
+        return this.$router.push('/auth/login')
+      }
       try {
         await axios.delete(`${process.env.VUE_APP_SERVICE_API}/v1/transfers/${cek}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }

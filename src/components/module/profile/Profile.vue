@@ -102,8 +102,8 @@ export default {
               reader.readAsDataURL(this.files[0])
               alert('photo has been changed successfully')
             })
-            .catch(() => {
-              alert('photo has failed to change')
+            .catch(error => {
+              console.log(error)
             })
         }
       })

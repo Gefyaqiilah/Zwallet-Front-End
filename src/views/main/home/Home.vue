@@ -1,10 +1,10 @@
 <template>
 <div>
     <header>
-        <Navbar :token="getToken" v-if="renderComponent"/>
+        <Navbar :token="sendToken" v-if="renderComponent"/>
     </header>
     <main class="grid-main">
-        <Menu class="menu" :token="getToken" v-bind:styling="this.$route.name==='SearchReceiver'? 'margin:50px 0 50px 0':'margin:auto 0 50px 0' "/>
+        <Menu class="menu" :token="sendToken" v-bind:styling="this.$route.name==='SearchReceiver'? 'margin:50px 0 50px 0':'margin:auto 0 50px 0' "/>
         <router-view class
         ="pages" :token="sendToken" v-if="renderComponent"/>
     </main>
@@ -17,8 +17,6 @@
 import Navbar from '@/components/module/Navbar'
 import Menu from '@/components/module/Menu'
 import Footer from '@/components/module/Footer'
-import axios from 'axios'
-import jwt from 'jsonwebtoken'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -43,60 +41,13 @@ export default {
           token: this.token
         }
       }
-    },
-    fetchToken () {
-      return axios.post(`${process.env.VUE_APP_SERVICE_API}/v1/users/token`, {
-        token: localStorage.getItem('refreshToken')
-      })
-        .then(results => {
-          const accessToken = results.data.result.accessToken
-          const decoded = jwt.verify(accessToken, process.env.VUE_APP_JWT_KEY)
-          // eslint-disable-next-line eqeqeq
-          const getLocalToken = {
-            ...JSON.parse(localStorage.getItem('dataUser')),
-            exp: 0,
-            iat: 0
-          }
-          const getFreshToken = {
-            ...decoded,
-            exp: 0,
-            iat: 0
-          }
-          // eslint-disable-next-line eqeqeq
-          if (JSON.stringify(getLocalToken) === JSON.stringify(getFreshToken)) {
-          } else {
-            localStorage.setItem('accessToken', JSON.stringify(accessToken))
-            localStorage.setItem('dataUser', JSON.stringify(getFreshToken))
-            this.renderComponent = false
-            this.$nextTick(() => {
-              this.renderComponent = true
-            })
-          }
-        })
-        .catch(() => {
-          clearInterval(this.timer)
-        })
     }
-  },
-  mounted () {
-    // this.timer = setInterval(this.fetchToken, 5000)
   },
   computed: {
     ...mapGetters(['getUserData']),
     sendToken () {
       return this.token
-    },
-    getToken: {
-      get: function () {
-        return this.token
-      },
-      set: function () {
-        this.token = JSON.parse(localStorage.getItem('dataUser'))
-      }
     }
-  },
-  beforeDestroy () {
-    clearInterval(this.timer)
   }
 }
 </script>
