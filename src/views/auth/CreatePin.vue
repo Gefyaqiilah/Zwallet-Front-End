@@ -10,16 +10,16 @@
         <div class="row">
             <div class="col-md-9 email-position ">
                 <div class="input-group pin">
-                    <input type="text" min="0" maxlength="1" class="form-control pin-1" name="" id="" required>
-                    <input type="text" min="0" maxlength="1" class="form-control pin-2" name="" id="" required>
-                    <input type="text" min="0" maxlength="1" class="form-control pin-3" name="" id="" required>
-                    <input type="text" min="0" maxlength="1" class="form-control pin-4" name="" id="" required>
-                    <input type="text" min="0" maxlength="1" class="form-control pin-5" name="" id="" required>
-                    <input type="text" min="0" maxlength="1" class="form-control pin-6" name="" id="" required>
+                    <input type="number" v-model="pin1" onkeypress="return this.value.length < 1;" oninput="if(this.value.length>=1) { this.value = this.value.slice(0,1; }"  class="form-control pin-1" name="" id="" required>
+                    <input type="number" v-model="pin2" onkeypress="return this.value.length < 1;" oninput="if(this.value.length>=1) { this.value = this.value.slice(0,1); }" class="form-control pin-2" name="" id="" required>
+                    <input type="number" v-model="pin3" onkeypress="return this.value.length < 1;" oninput="if(this.value.length>=1) { this.value = this.value.slice(0,1); }" class="form-control pin-3" name="" id="" required>
+                    <input type="number" v-model="pin4" onkeypress="return this.value.length < 1;" oninput="if(this.value.length>=1) { this.value = this.value.slice(0,1); }" class="form-control pin-4" name="" id="" required>
+                    <input type="number" v-model="pin5" onkeypress="return this.value.length < 1;" oninput="if(this.value.length>=1) { this.value = this.value.slice(0,1); }" class="form-control pin-5" name="" id="" required>
+                    <input type="number" v-model="pin6" onkeypress="return this.value.length < 1;" oninput="if(this.value.length>=1) { this.value = this.value.slice(0,1); }" class="form-control pin-6" name="" id="" required>
                 </div>
             </div>
             <div class="col-md-9 btn-login-position">
-              <button type="submit" class="btn-confirm">Confirm</button>
+              <button type="submit" @click.prevent="handleCreatePin" class="btn-confirm">Confirm</button>
             </div>
         </div>
     </form>
@@ -28,8 +28,20 @@
 
 <script>
 import $ from 'jquery'
+import { mapActions } from 'vuex'
 export default {
   name: 'CreatePin',
+  data () {
+    return {
+      pin1: '',
+      pin2: '',
+      pin3: '',
+      pin4: '',
+      pin5: '',
+      pin6: '',
+      id: JSON.parse(localStorage.getItem('dataUser')).id
+    }
+  },
   methods: {
     detectInputInserted () {
       $(document).on('change', function () {
@@ -42,6 +54,18 @@ export default {
           buttonSignUp.style.color = '#88888F'
         }
       })
+    },
+    ...mapActions(['createPin']),
+    handleCreatePin () {
+      const payload = {
+        id: this.id,
+        pin: parseInt(this.pin1 + this.pin2 + this.pin3 + this.pin4 + this.pin5 + this.pin6)
+      }
+      this.createPin(payload)
+        .then((result) => {
+          this.$router.push('/home')
+          alert('successfully added your pin')
+        })
     }
   },
   mounted () {
@@ -51,7 +75,11 @@ export default {
 </script>
 
 <style scoped>
-
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 .side-right .title {
     font-style: normal;
     font-weight: 700;
@@ -81,7 +109,8 @@ export default {
 
 .form-control {
     border: 1px solid rgba(169, 169, 169, 0.8);
-    width: 53px;
+    min-width: 30px;
+    max-width:70px;
     height: 65px;
     overflow: hidden !important;
     border-radius: 10px !important;

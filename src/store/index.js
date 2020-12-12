@@ -5,6 +5,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import router from '../router'
+import createPersistedState from "vuex-persistedstate"
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -13,6 +14,7 @@ export default new Vuex.Store({
     accessToken: null || localStorage.getItem('accessToken'),
     refreshToken: null || localStorage.getItem('refreshToken')
   },
+  plugins: [createPersistedState()],
   mutations: {
     SET_USERDATA(state, payload) {
       state.userData = payload
@@ -27,6 +29,7 @@ export default new Vuex.Store({
       state.refreshToken = null
     },
     REMOVE_ALL_LOCAL_STORAGE(state) {
+      localStorage.removeItem('vuex')
       localStorage.removeItem('accessToken')
       localStorage.removeItem('refreshToken')
       localStorage.removeItem('dataUser')
@@ -59,8 +62,29 @@ export default new Vuex.Store({
       context.commit('REMOVE_USERDATA')
       context.commit('REMOVE_ALLTOKEN')
     },
-    getNewAccessToken() {
-
+    createPin(context, payload) {
+      const pin = { pin: payload.pin }
+      return new Promise((resolve, reject) => {
+        axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/${payload.id}`, pin, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
+        })
+          .then(results => {
+            resolve(results)
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
+    async transfer(context, payload) {
+      return new Promise((resolve, reject) => {
+        try {
+          const result = axios.post(`${process.env.VUE_APP_SERVICE_API}/v1/transfers`, payload)
+          resolve(result)
+        } catch (error) {
+          reject(error)
+        }
+      })
     },
     interceptorRequest(context) {
       axios.interceptors.request.use(function (config) {
@@ -135,6 +159,10 @@ export default new Vuex.Store({
     },
     isLogin(state) {
       return state.accessToken !== null && state.refreshToken !== null
+    },
+    isPinExist(state) {
+      console.log(state.userData.pin !== "not exists")
+      return state.userData.pin !== "not exists"
     }
   },
   modules: {

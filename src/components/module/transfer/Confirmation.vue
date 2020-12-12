@@ -23,7 +23,7 @@
           <p>Amount</p>
         </div>
         <div class="amount-money bold gap">
-          <p>Rp100.000</p>
+          <p>Rp. {{amount}}</p>
         </div>
       </div>
       <div class="balance-left">
@@ -31,7 +31,7 @@
           <p>Balance Left</p>
         </div>
         <div class="balance-money bold gap">
-          <p>Rp20.000</p>
+          <p>Rp. {{balanceLeft}}</p>
         </div>
       </div>
       <div class="date-time">
@@ -39,7 +39,7 @@
           <p>Date & Time</p>
         </div>
         <div class="date-time-time bold gap">
-          <p>May 11, 2020 - 12.20</p>
+          <p>{{new Date()}}</p>
         </div>
       </div>
       <div class="notes">
@@ -47,27 +47,51 @@
           <p>Notes</p>
         </div>
         <div class="notes-desc bold gap">
-          <p>For buying some socks</p>
+          <p>{{notes}}</p>
         </div>
       </div>
     </div>
     <div class="button-position">
       <button type="submit" id="show-modal-pin" v-on:click.prevent="showModalPin" class="btn-continue">Continue</button>
     </div>
-    <ModalPin ref="modal" />
+    <ModalPin ref="modal" :props="props" />
   </div>
 </template>
 
 <script>
 import ModalPin from '@/components/module/transfer/ModalPin'
+import { mapGetters } from 'vuex'
 export default {
   name: 'Confirmation',
   components: {
     ModalPin
   },
+  data () {
+    return {
+      amount: this.$route.query.amount,
+      notes: this.$route.query.notes,
+      idReceiver: this.$route.query.idReceiver
+    }
+  },
   methods: {
     showModalPin () {
       this.$refs.modal.showModalPin()
+    }
+  },
+  computed: {
+    ...mapGetters(['getUserData']),
+    handleIdSender () {
+      return this.getUserData.id
+    },
+    balanceLeft () {
+      return this.getUserData.balance - this.amount
+    },
+    props () {
+      return {
+        amount: this.amount,
+        notes: this.notes,
+        idReceiver: this.idReceiver
+      }
     }
   }
 }

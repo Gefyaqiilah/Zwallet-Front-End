@@ -36,7 +36,10 @@ const routes = [
     name: 'Home',
     component: Home,
     redirect: '/home/home',
-    meta: { requiresAuth: true },
+    meta: {
+      requiresPin: true,
+      requiresAuth: true
+    },
     children: [
       {
         path: 'home',
@@ -115,27 +118,33 @@ const routes = [
     name: 'Auth',
     component: Auth,
     redirect: '/auth/login',
-    meta: { requiresVisitor: true },
     children: [
       {
         path: 'login',
         name: 'Login',
-        component: Login
+        component: Login,
+        meta: { requiresVisitor: true }
       },
       {
         path: 'signup',
         name: 'SignUp',
-        component: SignUp
+        component: SignUp,
+        meta: { requiresVisitor: true }
       },
       {
         path: 'createpin',
         name: 'CreatePin',
-        component: CreatePin
+        component: CreatePin,
+        meta: {
+          requiresCheckPin: true,
+          requiresAuth: true
+        }
       },
       {
         path: 'resetpassword',
         name: 'ResetPassword',
-        component: ResetPassword
+        component: ResetPassword,
+        meta: { requiresVisitor: true }
       }
     ]
   },
@@ -153,7 +162,19 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
+  if (to.matched.some(record => record.meta.requiresPin && record.meta.requiresAuth)) {
+    if (!store.getters.isLogin) {
+      next({
+        path: '/auth/login'
+      })
+    }
+    if (!store.getters.isPinExist) {
+      next({
+        path: '/auth/createpin'
+      })
+    }
+    next()
+  } if (to.matched.some(record => record.meta.requiresAuth)) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
     if (!store.getters.isLogin) {
@@ -163,7 +184,7 @@ router.beforeEach((to, from, next) => {
     } else {
       next()
     }
-  } else if (to.matched.some(record => record.meta.requiresVisitor)) {
+  } if (to.matched.some(record => record.meta.requiresVisitor)) {
     if (store.getters.isLogin) {
       next({
         path: '/home/home'
@@ -171,8 +192,20 @@ router.beforeEach((to, from, next) => {
     } else {
       next()
     }
-  } else {
-    next() // make sure to always call next()!
+  } if (to.matched.some(record => record.meta.requiresCheckPin && record.meta.requiresAuth)) {
+    console.log('masukk')
+    if (!store.getters.isLogin) {
+      next({
+        path: '/auth/login'
+      })
+    }
+    if (store.getters.isPinExist) {
+      next({
+        path: '/home/home'
+      })
+    }
+    next()
   }
+  next()
 })
 export default router

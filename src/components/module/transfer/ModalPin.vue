@@ -14,25 +14,24 @@
         <form action="" class="form">
           <div class="pin">
             <input
-              type="text"
+              type="password"
+              v-model="pin1"
               min="0"
               maxlength="1"
               class="form-control pin-1"
-              name=""
-              id=""
               required
             />
             <input
-              type="text"
+              type="password"
+              v-model="pin2"
               min="0"
               maxlength="1"
               class="form-control pin-2"
-              name=""
-              id=""
               required
             />
             <input
-              type="text"
+              type="password"
+              v-model="pin3"
               min="0"
               maxlength="1"
               class="form-control pin-3"
@@ -41,35 +40,32 @@
               required
             />
             <input
-              type="text"
+              type="password"
+              v-model="pin4"
               min="0"
               maxlength="1"
               class="form-control pin-4"
-              name=""
-              id=""
               required
             />
             <input
-              type="text"
+              type="password"
+              v-model="pin5"
               min="0"
               maxlength="1"
               class="form-control pin-5"
-              name=""
-              id=""
               required
             />
             <input
-              type="text"
+              type="password"
+              v-model="pin6"
               min="0"
               maxlength="1"
               class="form-control pin-6"
-              name=""
-              id=""
               required
             />
           </div>
           <div class="modalpin-footer">
-            <button type="submit">Confirm</button>
+            <button type="submit" @click.prevent="handleTransfer">Confirm</button>
           </div>
         </form>
       </div>
@@ -78,8 +74,21 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'ModalPin',
+  data () {
+    return {
+      userDataTransfer: this.props,
+      pin1: '',
+      pin2: '',
+      pin3: '',
+      pin4: '',
+      pin5: '',
+      pin6: ''
+    }
+  },
+  props: ['props'],
   mounted () {
     this.showModalPin()
   },
@@ -109,8 +118,32 @@ export default {
         }
       }
     },
-    clickModal () {
-
+    ...mapActions(['transfer']),
+    handleTransfer () {
+      const dataTransfer = {
+        idSender: this.handleIdSender,
+        ...this.userDataTransfer,
+        pin: parseInt(this.pin1 + this.pin2 + this.pin3 + this.pin4 + this.pin5 + this.pin6)
+      }
+      this.transfer(dataTransfer)
+        .then(() => {
+          this.pin1 = ''
+          this.pin2 = ''
+          this.pin3 = ''
+          this.pin4 = ''
+          this.pin5 = ''
+          this.pin6 = ''
+          const modal = document.getElementById('modalPIN')
+          modal.style.display = 'none'
+          alert('Transfer successfully !')
+          this.$router.push('/home')
+        })
+    }
+  },
+  computed: {
+    ...mapGetters(['getUserData']),
+    handleIdSender () {
+      return this.getUserData.id
     }
   }
 }

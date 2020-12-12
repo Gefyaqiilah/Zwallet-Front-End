@@ -20,7 +20,7 @@
         Type the amount you want to transfer and then
 press continue to the next steps.
       </p>
-    <form action=""  v-on:submit="transfer" method="">
+    <form action=""  v-on:submit="toConfirmation" method="">
     <div class="field-amount">
         <div class="form-group">
           <div class="input-group" style="display:flex; justify-content:center;">
@@ -92,6 +92,11 @@ export default {
           }
         }
       }
+    },
+    async toConfirmation () {
+      this.$router.push({
+        name: 'Confirmation', query: { idReceiver: this.$route.params.idUser, amount: this.inputAmount, notes: this.inputNotes }
+      })
     }
   },
   mounted () {
@@ -106,7 +111,11 @@ export default {
 </script>
 
 <style scoped>
-
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 .transfer-to {
     background: #FFFFFF;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
