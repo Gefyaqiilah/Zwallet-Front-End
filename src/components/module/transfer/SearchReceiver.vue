@@ -63,7 +63,6 @@ export default {
         const searchReceiver = await axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/users/search?firstName=${this.search}`)
         this.searchUser = searchReceiver.data.result
       } catch (error) {
-        console.log(error)
       }
     },
     handleScrolledBottom (isVisible) {

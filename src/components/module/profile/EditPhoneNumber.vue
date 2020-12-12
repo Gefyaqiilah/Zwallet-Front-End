@@ -68,7 +68,6 @@ export default {
         alert('Phone number has been updated')
         this.$router.push('/home/managephonenumber')
       } catch (error) {
-        console.log(error)
       }
     }
   },

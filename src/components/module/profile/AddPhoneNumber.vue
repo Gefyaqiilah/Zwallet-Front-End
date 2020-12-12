@@ -68,7 +68,6 @@ export default {
         alert('Phone number has been successfully added')
         this.$router.replace('/home')
       } catch (error) {
-        console.log(error)
       }
     }
   },

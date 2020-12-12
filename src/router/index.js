@@ -62,7 +62,7 @@ const routes = [
         component: Confirmation
       },
       {
-        path: 'statussucceed',
+        path: 'statussucceed/:idTransfer',
         name: 'StatusSucceed',
         component: StatusSucceed
       },
@@ -193,7 +193,6 @@ router.beforeEach((to, from, next) => {
       next()
     }
   } if (to.matched.some(record => record.meta.requiresCheckPin && record.meta.requiresAuth)) {
-    console.log('masukk')
     if (!store.getters.isLogin) {
       next({
         path: '/auth/login'

@@ -85,9 +85,6 @@ export default {
           alert('Login successful')
           this.$router.push('/home')
         })
-        .catch(err => {
-          console.log(err)
-        })
     },
     detectInputInserted () {
       $(document).on('change', function () {

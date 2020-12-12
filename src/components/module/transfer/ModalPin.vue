@@ -135,8 +135,6 @@ export default {
           this.pin6 = ''
           const modal = document.getElementById('modalPIN')
           modal.style.display = 'none'
-          alert('Transfer successfully !')
-          this.$router.push('/home')
         })
     }
   },

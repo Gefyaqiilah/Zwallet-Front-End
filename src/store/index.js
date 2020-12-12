@@ -86,6 +86,16 @@ export default new Vuex.Store({
         }
       })
     },
+    async getDetailTransferById(context, payload) {
+      return new Promise((resolve, reject) => {
+        try {
+          const result = axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/transfers/${payload}`)
+          resolve(result)
+        } catch (error) {
+          reject(error)
+        }
+      })
+    },
     interceptorRequest(context) {
       axios.interceptors.request.use(function (config) {
         axios.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem('accessToken')}`
@@ -96,10 +106,20 @@ export default new Vuex.Store({
     },
     interceptorResponse(context) {
       axios.interceptors.response.use(function (response) {
+        const responseStatus = response.data.statusCode
+        const responseMessage = response.data.result.message
+
+        if (responseStatus === 200) {
+          if (responseMessage === 'transfer successfully') {
+            alert('transfer successfully')
+            return router.push({ name: 'StatusSucceed', params: { idTransfer: response.data.result.idTransfer } })
+          }
+        }
         return response
       }, function (error) {
         const errorStatus = error.response.data.status
         const errorMessage = error.response.data.err.message
+
         if (errorStatus === 404) {
           if (errorMessage === 'Email or password you entered is incorrect.') {
             alert('Email or password invalid')
@@ -122,7 +142,6 @@ export default new Vuex.Store({
                 const accessToken = results.data.result.accessToken
                 const config = error.config
                 config.headers.Authorization = `Bearer ${accessToken}`
-                console.log(config)
                 // request again
                 axios.request(config)
                   .then(() => {
@@ -148,6 +167,10 @@ export default new Vuex.Store({
           } else if (errorMessage === 'email must be verified first, check the email we have sent') {
             alert('sorry your email has not been verified, please verify it first')
           }
+        } else if (errorStatus === 400) {
+          if (errorMessage === 'Sorry, Your PIN is wrong') {
+            alert('Sorry, Your PIN is wrong')
+          }
         }
         return Promise.reject(error)
       })
@@ -161,7 +184,6 @@ export default new Vuex.Store({
       return state.accessToken !== null && state.refreshToken !== null
     },
     isPinExist(state) {
-      console.log(state.userData.pin !== "not exists")
       return state.userData.pin !== "not exists"
     }
   },

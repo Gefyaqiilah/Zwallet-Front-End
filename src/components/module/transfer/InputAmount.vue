@@ -66,10 +66,8 @@ export default {
     async getReceiver () {
       try {
         const dataReceiver = await axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/users/${this.$route.params.idUser}`)
-        console.log(dataReceiver.data.result)
         this.userReceiver.push(...dataReceiver.data.result)
       } catch (error) {
-        console.log(error)
       }
     },
     async transfer (e) {

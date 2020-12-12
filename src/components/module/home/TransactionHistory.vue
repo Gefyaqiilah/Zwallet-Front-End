@@ -42,7 +42,6 @@ export default {
         const resultsFetchTransfers = await axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/transfers/search?firstName=${this.firstName}&type=transfers&page=1&limit=4`, { headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` } })
         this.dataTransfer.push(...resultsFetchTransfers.data.result)
       } catch (error) {
-        console.log(error)
       }
     },
     async deleteTransaction (cek) {
