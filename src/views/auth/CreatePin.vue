@@ -10,12 +10,12 @@
         <div class="row">
             <div class="col-md-9 email-position ">
                 <div class="input-group pin">
-                    <input type="number" v-model="pin1" onkeypress="return this.value.length < 1;" oninput="if(this.value.length>=1) { this.value = this.value.slice(0,1; }"  class="form-control pin-1" name="" id="" required>
-                    <input type="number" v-model="pin2" onkeypress="return this.value.length < 1;" oninput="if(this.value.length>=1) { this.value = this.value.slice(0,1); }" class="form-control pin-2" name="" id="" required>
-                    <input type="number" v-model="pin3" onkeypress="return this.value.length < 1;" oninput="if(this.value.length>=1) { this.value = this.value.slice(0,1); }" class="form-control pin-3" name="" id="" required>
-                    <input type="number" v-model="pin4" onkeypress="return this.value.length < 1;" oninput="if(this.value.length>=1) { this.value = this.value.slice(0,1); }" class="form-control pin-4" name="" id="" required>
-                    <input type="number" v-model="pin5" onkeypress="return this.value.length < 1;" oninput="if(this.value.length>=1) { this.value = this.value.slice(0,1); }" class="form-control pin-5" name="" id="" required>
-                    <input type="number" v-model="pin6" onkeypress="return this.value.length < 1;" oninput="if(this.value.length>=1) { this.value = this.value.slice(0,1); }" class="form-control pin-6" name="" id="" required>
+                    <input type="password" v-model="pin1" onkeypress="return this.value.length < 1;" oninput="if(this.value.length>=1) { this.value = this.value.slice(0,1; }"  class="form-control pin-1" required>
+                    <input type="password" v-model="pin2" onkeypress="return this.value.length < 1;" oninput="if(this.value.length>=1) { this.value = this.value.slice(0,1); }" class="form-control pin-2" required>
+                    <input type="password" v-model="pin3" onkeypress="return this.value.length < 1;" oninput="if(this.value.length>=1) { this.value = this.value.slice(0,1); }" class="form-control pin-3" required>
+                    <input type="password" v-model="pin4" onkeypress="return this.value.length < 1;" oninput="if(this.value.length>=1) { this.value = this.value.slice(0,1); }" class="form-control pin-4" required>
+                    <input type="password" v-model="pin5" onkeypress="return this.value.length < 1;" oninput="if(this.value.length>=1) { this.value = this.value.slice(0,1); }" class="form-control pin-5" required>
+                    <input type="password" v-model="pin6" onkeypress="return this.value.length < 1;" oninput="if(this.value.length>=1) { this.value = this.value.slice(0,1); }" class="form-control pin-6" required>
                 </div>
             </div>
             <div class="col-md-9 btn-login-position">
@@ -28,7 +28,7 @@
 
 <script>
 import $ from 'jquery'
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 export default {
   name: 'CreatePin',
   data () {
@@ -62,10 +62,18 @@ export default {
         pin: parseInt(this.pin1 + this.pin2 + this.pin3 + this.pin4 + this.pin5 + this.pin6)
       }
       this.createPin(payload)
-        .then((result) => {
-          this.$router.push('/home')
+        .then(async () => {
+          await this.handleSetFromIo(payload.id)
           alert('successfully added your pin')
+          this.$router.push('/home')
         })
+    },
+    ...mapMutations(['SET_FROM_IO']),
+    handleSetFromIo (id) {
+      this.$socket.emit('getUserData', id)
+      this.sockets.subscribe('getUserData', data => {
+        this.SET_FROM_IO(data[0])
+      })
     }
   },
   mounted () {

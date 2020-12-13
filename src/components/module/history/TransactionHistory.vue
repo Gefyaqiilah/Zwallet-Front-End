@@ -60,7 +60,7 @@
                 <p>Subscription</p>
             </div>
             <div class="amount red">
-                <p>-Rp249.000</p>
+                <p>-{{handleLastName}}</p>
             </div>
         </div>
     </div>
@@ -69,8 +69,15 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
-  name: 'TransactionHistory'
+  name: 'TransactionHistory',
+  computed: {
+    ...mapGetters(['getUserData']),
+    handleLastName () {
+      return this.getUserData.firstName
+    }
+  }
 }
 </script>
 

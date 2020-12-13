@@ -32,7 +32,7 @@ press continue to the next steps.
           </div>
     </div>
       <p style="color:black;text-align:center;font-weight:700;">
-        {{balance === 0 ? `Rp.${balance} your balance is not enough`:`Rp.${balance} available` }}
+        {{getUserData.balance == 0 ? `Oops! your balance is not enough`:`Rp.${getUserData.balance} available` }}
         </p>
           <div class="form-group form-position">
             <div class="input-group input-group-position">
@@ -52,7 +52,7 @@ press continue to the next steps.
 
 <script>
 import axios from 'axios'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'InputAmount',
   data () {
@@ -73,7 +73,7 @@ export default {
     },
     async transfer (e) {
       e.preventDefault()
-      if (this.balance < this.inputAmount) {
+      if (this.getUserData.balance < this.inputAmount) {
         alert('Oops! Sorry your balance is not enough')
       } else {
         const data = {
@@ -93,9 +93,13 @@ export default {
       }
     },
     async toConfirmation () {
-      this.$router.push({
-        name: 'Confirmation', query: { idReceiver: this.$route.params.idUser, amount: this.inputAmount, notes: this.inputNotes }
-      })
+      if (parseInt(this.getUserData.balance) <= parseInt(this.inputAmount)) {
+        alert('Oops! Sorry your balance is not enough')
+      } else {
+        this.$router.push({
+          name: 'Confirmation', query: { idReceiver: this.$route.params.idUser, amount: this.inputAmount, notes: this.inputNotes }
+        })
+      }
     }
   },
   mounted () {
@@ -104,7 +108,8 @@ export default {
   computed: {
     balanceSender () {
       return JSON.parse(localStorage.getItem('dataUser').balance)
-    }
+    },
+    ...mapGetters(['getUserData'])
   }
 }
 </script>

@@ -17,7 +17,7 @@
 import Navbar from '@/components/module/Navbar'
 import Menu from '@/components/module/Menu'
 import Footer from '@/components/module/Footer'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 export default {
   name: 'Home',
@@ -26,7 +26,8 @@ export default {
       token: JSON.parse(localStorage.getItem('dataUser')),
       timer: '',
       renderComponent: true,
-      firstName: JSON.parse(localStorage.getItem('dataUser')).firstName
+      firstName: JSON.parse(localStorage.getItem('dataUser')).firstName,
+      data: null
     }
   },
   components: {
@@ -41,6 +42,19 @@ export default {
           token: this.token
         }
       }
+    },
+    ...mapActions(['getUserDataFromSocketIo']),
+    handleGetUserDataFromSocketIo (id) {
+      this.getUserDataFromSocketIo(id)
+    },
+    ...mapMutations(['SET_FROM_IO', 'SET_INTERVAL_SOCKET_IO']),
+    handleSetFromIo () {
+      this.SET_INTERVAL_SOCKET_IO(setInterval(() => {
+        this.$socket.emit('getUserData', this.token.id)
+        this.sockets.subscribe('getUserData', data => {
+          this.SET_FROM_IO(data[0])
+        })
+      }, 10000))
     }
   },
   computed: {
@@ -48,11 +62,23 @@ export default {
     sendToken () {
       return this.token
     }
+  },
+  mounted () {
+    this.handleSetFromIo()
+    // this.handleGetUserDataFromSocketIo(this.token.id)
+    // this.$socket.emit('getUserData', '64175ca1-e1f9-4154-a5ee-371474849aa0')
+    // this.sockets.subscribe('getUserData', (data) => {
+    //   console.log('asup cookkk', data)
+    //   this.data = data
+    // })
   }
 }
 </script>
 
 <style scoped>
+*{
+  box-sizing: border-box;
+}
 main{
   width:100%;
   padding: 50px 150px 50px 150px;

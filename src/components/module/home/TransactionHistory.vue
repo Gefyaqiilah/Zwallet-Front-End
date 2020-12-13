@@ -15,7 +15,7 @@
                   <p class="name">{{transferTransaction.Receiver}}</p>
                   <p class="status">Transfer to {{transferTransaction.Receiver}}</p>
               </div>
-              <p class="amount red">- Rp.{{transferTransaction.amount}} <img src="/img/trash.png" v-on:click.prevent="deleteTransaction(transferTransaction.idTransfer,$event)" :value="transferTransaction.idTransfer" :alt="transferTransaction.idTransfer"></p>
+              <p class="amount red">- Rp.{{transferTransaction.amount}} <img src="/img/trash.png" v-on:click.prevent="handleDeleteTransactionTransferById(transferTransaction.idTransfer,$event)" :value="transferTransaction.idTransfer" :alt="transferTransaction.idTransfer"></p>
           </div>
       </div>
   </div>
@@ -25,7 +25,7 @@
 
 <script>
 import axios from 'axios'
-import { mapMutations } from 'vuex'
+import { mapMutations, mapActions } from 'vuex'
 export default {
   name: 'TransactionHistory',
   data () {
@@ -61,6 +61,21 @@ export default {
       } catch (error) {
         alert('failed to be deleted')
       }
+    },
+    ...mapActions(['deleteTransactionTransferById']),
+    handleDeleteTransactionTransferById (id) {
+      if (!localStorage.getItem('accessToken')) {
+        this.REMOVE_USERDATA()
+        this.REMOVE_ALLTOKEN()
+        this.REMOVE_ALL_LOCAL_STORAGE()
+        return this.$router.push('/auth/login')
+      }
+      this.deleteTransactionTransferById(id)
+        .then(() => {
+          const filter = this.dataTransfer.filter((data) => data.idTransfer !== id)
+          this.dataTransfer = filter
+          alert('succeed delete transfers history')
+        })
     }
   },
   mounted () {

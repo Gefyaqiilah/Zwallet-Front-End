@@ -16,6 +16,8 @@
           <p class="number">{{ userData.phoneNumber }}</p>
         <div class="delete">
           <router-link :to="'/home/editphonenumber'+'?type=primary'"><img src="/img/edit-2.png" alt="" /></router-link>
+          <img @click.prevent="handleDeletePhoneNumber('primary')" src="/img/trash.png" alt="" />
+
         </div>
         </div>
       </div>
@@ -42,6 +44,7 @@
           <p class="number">{{ userData.phoneNumberSecond }}</p>
         <div class="delete">
           <router-link :to="'/home/editphonenumber'+'?type=secondary'"><img src="/img/edit-2.png" alt="" /></router-link>
+          <img @click.prevent="handleDeletePhoneNumber('secondary')" src="/img/trash.png" alt="" />
         </div>
         </div>
       </div>
@@ -52,7 +55,7 @@
           <p>Add Secondary Phone Number</p>
         </div>
         <div class="bold gap phone-grid">
-          <p class="number">{{ userData.phoneNumberSecond }}</p>
+          <p class="number">Add Secondary Phone Number</p>
         <div class="delete">
           <router-link :to="'/home/addPhoneNumber'+'?type=secondary'"><img src="/img/edit-2.png" alt="" /></router-link>
         </div>
@@ -63,6 +66,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'ManagePhoneNumber',
   props: ['token'],
@@ -71,7 +75,33 @@ export default {
       userData: this.token
     }
   },
-  mounted () {
+  methods: {
+    ...mapActions(['deletePhoneNumber']),
+    handleDeletePhoneNumber (type) {
+      let data = null
+      if (type === 'primary') {
+        data = { phoneNumber: '' }
+      } else if (type === 'secondary') {
+        data = { phoneNumberSecond: '' }
+      }
+      alert(data)
+      const payload = {
+        idUser: this.handleIdUser,
+        phoneNumber: {
+          ...data
+        }
+      }
+      this.deletePhoneNumber(payload)
+        .then(() => {
+          alert('successfully deleted the phone number')
+        })
+    }
+  },
+  computed: {
+    ...mapGetters(['getUserData']),
+    handleIdUser () {
+      return this.getUserData.id
+    }
   }
 }
 </script>

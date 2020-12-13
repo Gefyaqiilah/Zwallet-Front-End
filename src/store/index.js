@@ -6,13 +6,15 @@ import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import router from '../router'
 import createPersistedState from "vuex-persistedstate"
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     userData: null,
     accessToken: null || localStorage.getItem('accessToken'),
-    refreshToken: null || localStorage.getItem('refreshToken')
+    refreshToken: null || localStorage.getItem('refreshToken'),
+    intervalSocketIo: null
   },
   plugins: [createPersistedState()],
   mutations: {
@@ -28,11 +30,20 @@ export default new Vuex.Store({
       state.accessToken = null
       state.refreshToken = null
     },
-    REMOVE_ALL_LOCAL_STORAGE(state) {
+    REMOVE_ALL_LOCAL_STORAGE() {
       localStorage.removeItem('vuex')
       localStorage.removeItem('accessToken')
       localStorage.removeItem('refreshToken')
       localStorage.removeItem('dataUser')
+    },
+    SET_FROM_IO(state, payload) {
+      state.userData = payload
+    },
+    SET_INTERVAL_SOCKET_IO(state, payload) {
+      state.intervalSocketIo = payload
+    },
+    CLEAR_INTERVAL_SOCKET_IO(state, payload) {
+      clearInterval(state.intervalSocketIo)
     }
   },
   actions: {
@@ -61,6 +72,7 @@ export default new Vuex.Store({
       context.commit('REMOVE_ALL_LOCAL_STORAGE')
       context.commit('REMOVE_USERDATA')
       context.commit('REMOVE_ALLTOKEN')
+      context.commit('CLEAR_INTERVAL_SOCKET_IO')
     },
     createPin(context, payload) {
       const pin = { pin: payload.pin }
@@ -117,7 +129,30 @@ export default new Vuex.Store({
         }
       })
     },
-    interceptorRequest(context) {
+    deletePhoneNumber(context, payload) {
+      return new Promise((resolve, reject) => {
+        try {
+          const deleteResult = axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/${payload.idUser}`, payload.phoneNumber)
+          resolve(deleteResult)
+        } catch (error) {
+          reject(error)
+        }
+      })
+    },
+    deleteTransactionTransferById (context, payload) {
+      return new Promise((resolve, reject) => {
+        axios.delete(`${process.env.VUE_APP_SERVICE_API}/v1/transfers/${payload}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
+        })
+          .then(results => {
+            resolve(results)
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
+    interceptorRequest() {
       axios.interceptors.request.use(function (config) {
         axios.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem('accessToken')}`
         return config
@@ -129,11 +164,9 @@ export default new Vuex.Store({
       axios.interceptors.response.use(function (response) {
         const responseStatus = response.data.statusCode
         const responseMessage = response.data.result.message
-
         if (responseStatus === 200) {
           if (responseMessage === 'transfer successfully') {
             alert('transfer successfully')
-            console.log(response.data.result)
             return router.push({ name: 'StatusSucceed', query: { idTransfer: response.data.result.idTransfer, idReceiver: response.data.result.idReceiver } })
           }
         }
@@ -147,7 +180,12 @@ export default new Vuex.Store({
             alert('Email or password invalid')
           }
         } else if (errorStatus === 500) {
-          alert('Oops! Sorry Looks like server having trouble')
+          if (errorMessage === 'Sender Balance is not enough for transfer') {
+            alert('Oops! Your balance is not enough')
+          } else {
+            alert('Oops! Sorry Looks like server having trouble')
+            return router.push('/home')
+          }
         } else if (errorStatus === 401) {
           if (errorMessage === 'Access Token expired') {
             // get new accesstoken

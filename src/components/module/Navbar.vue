@@ -7,10 +7,10 @@
         <div class="col-12 col-sm-6  col-md-6 nav-right">
             <div class="account-info">
                 <div class="user-photo">
-                    <img class="photo" :src="userData.photo === null? '/img/user-avatar.png' :userData.photo" alt="">
+                    <img class="photo" :src="getUserData.photo === null? '/img/user-avatar.png' :getUserData.photo" alt="">
                 </div>
-                <h1 style="text-transform:capitalize;">{{userData.firstName +' '+ userData.lastName}}</h1>
-                <p>{{userData.phoneNumber}}</p>
+                <h1 style="text-transform:capitalize;">{{getUserData.firstName +' '}} {{getUserData.lastName !== null? getUserData.lastName : ''}}</h1>
+                <p>{{getUserData.phoneNumber !== null ? getUserData.phoneNumber : 'phone number has not been added'}}</p>
                 <div class="notification">
                     <img src="/img/bell.png" class="notification" alt="">
                 </div>
@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'Navbar',
   data () {
@@ -36,6 +37,9 @@ export default {
     token: Object
   },
   methods: {
+  },
+  computed: {
+    ...mapGetters(['getUserData'])
   }
 }
 </script>

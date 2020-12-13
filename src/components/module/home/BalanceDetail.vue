@@ -4,8 +4,8 @@
       <div class="row">
           <div class="col-12 col-sm-6 col-md-6">
               <p class="mt-4 ml-2 balance">Balance</p>
-              <h1 class="ml-2 balance-amount">Rp.{{userBalance}}</h1>
-              <p class="ml-2 telephone">{{userNumber}}</p>
+              <h1 class="ml-2 balance-amount">Rp.{{getUserData.balance}}</h1>
+              <p class="ml-2 telephone">{{getUserData.phoneNumber !== null ? getUserData.phoneNumber : 'phone number has not been added'}}</p>
           </div>
           <div class="col-12 col-sm-6 col-md-6">
               <div class="row justify-content-end mt-4 mr-3">
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'BalanceDetail',
   data () {
@@ -34,6 +35,12 @@ export default {
   methods: {
     linkTransfer () {
       this.$router.push('/home/searchreceiver')
+    }
+  },
+  computed: {
+    ...mapGetters(['getUserData']),
+    handleGetUserData () {
+      return this.getUserData
     }
   }
 }

@@ -95,7 +95,6 @@ export default {
           firstName: this.handleFirstName
         }
         this.getDetailTransferByFirstName(payload).then(res => {
-          console.log(res)
           this.detailTransferByFirstName = res.data.result[0]
         })
       })
@@ -103,8 +102,6 @@ export default {
     handleGetReceiver () {
       this.getReceiver(this.$route.query.idReceiver).then(result => {
         this.userReceiver = result.data.result[0]
-        console.log('berhasil ke get receiver')
-        console.log(result.data.result[0])
       })
     },
     print () {
