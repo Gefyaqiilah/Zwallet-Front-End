@@ -52,6 +52,7 @@ press continue to the next steps.
 
 <script>
 import axios from 'axios'
+import { mapActions } from 'vuex'
 export default {
   name: 'InputAmount',
   data () {
@@ -63,12 +64,12 @@ export default {
     }
   },
   methods: {
-    async getReceiver () {
-      try {
-        const dataReceiver = await axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/users/${this.$route.params.idUser}`)
-        this.userReceiver.push(...dataReceiver.data.result)
-      } catch (error) {
-      }
+    ...mapActions(['getReceiver']),
+    async handleGetReceiver () {
+      this.getReceiver(this.$route.params.idUser)
+        .then(results => {
+          this.userReceiver.push(...results.data.result)
+        })
     },
     async transfer (e) {
       e.preventDefault()
@@ -98,7 +99,7 @@ export default {
     }
   },
   mounted () {
-    this.getReceiver()
+    this.handleGetReceiver()
   },
   computed: {
     balanceSender () {

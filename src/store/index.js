@@ -78,12 +78,13 @@ export default new Vuex.Store({
     },
     async transfer(context, payload) {
       return new Promise((resolve, reject) => {
-        try {
-          const result = axios.post(`${process.env.VUE_APP_SERVICE_API}/v1/transfers`, payload)
-          resolve(result)
-        } catch (error) {
-          reject(error)
-        }
+        axios.post(`${process.env.VUE_APP_SERVICE_API}/v1/transfers`, payload)
+          .then(results => {
+            resolve(results)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
     async getDetailTransferById(context, payload) {
@@ -91,6 +92,26 @@ export default new Vuex.Store({
         try {
           const result = axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/transfers/${payload}`)
           resolve(result)
+        } catch (error) {
+          reject(error)
+        }
+      })
+    },
+    async getDetailTransferByFirstName(context, payload) {
+      return new Promise((resolve, reject) => {
+        try {
+          const result = axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/transfers/search?firstName=${payload.firstName}&type=transfers`)
+          resolve(result)
+        } catch (error) {
+          reject(error)
+        }
+      })
+    },
+    async getReceiver (context, payload) {
+      return new Promise((resolve, reject) => {
+        try {
+          const dataReceiver = axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/users/${payload}`)
+          resolve(dataReceiver)
         } catch (error) {
           reject(error)
         }
@@ -112,7 +133,8 @@ export default new Vuex.Store({
         if (responseStatus === 200) {
           if (responseMessage === 'transfer successfully') {
             alert('transfer successfully')
-            return router.push({ name: 'StatusSucceed', params: { idTransfer: response.data.result.idTransfer } })
+            console.log(response.data.result)
+            return router.push({ name: 'StatusSucceed', query: { idTransfer: response.data.result.idTransfer, idReceiver: response.data.result.idReceiver } })
           }
         }
         return response
@@ -170,6 +192,9 @@ export default new Vuex.Store({
         } else if (errorStatus === 400) {
           if (errorMessage === 'Sorry, Your PIN is wrong') {
             alert('Sorry, Your PIN is wrong')
+          } else if (errorMessage === 'Data Transfer User not Found..') {
+            alert('Id user is wrong')
+            router.push('/home/home')
           }
         }
         return Promise.reject(error)

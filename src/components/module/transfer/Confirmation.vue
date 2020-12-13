@@ -6,11 +6,11 @@
     <div class="transfer-to-user">
       <div class="receiver">
         <div class="thumbnail-photo">
-          <img src="/img/1-70x70.png" alt="" />
+          <img class="photo" :src="userReceiver.photo === null ? '/img/user-avatar.png':userReceiver.photo" alt="" />
         </div>
         <div class="detail-username">
-          <p class="username">Samuel Suhi</p>
-          <p class="telephone">+62 813-8492-9994</p>
+          <p class="username">{{ userReceiver.firstName }}</p>
+          <p class="telephone">{{ userReceiver.phoneNumber }}</p>
         </div>
       </div>
     </div>
@@ -23,7 +23,7 @@
           <p>Amount</p>
         </div>
         <div class="amount-money bold gap">
-          <p>Rp. {{amount}}</p>
+          <p>Rp. {{this.$route.query.amount}}</p>
         </div>
       </div>
       <div class="balance-left">
@@ -47,7 +47,7 @@
           <p>Notes</p>
         </div>
         <div class="notes-desc bold gap">
-          <p>{{notes}}</p>
+          <p>{{this.$route.query.notes}}</p>
         </div>
       </div>
     </div>
@@ -60,23 +60,33 @@
 
 <script>
 import ModalPin from '@/components/module/transfer/ModalPin'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'Confirmation',
-  components: {
-    ModalPin
-  },
   data () {
     return {
-      amount: this.$route.query.amount,
-      notes: this.$route.query.notes,
-      idReceiver: this.$route.query.idReceiver
+      userReceiver: null
     }
+  },
+  components: {
+    ModalPin
   },
   methods: {
     showModalPin () {
       this.$refs.modal.showModalPin()
+    },
+    ...mapActions(['getReceiver']),
+    handleGetReceiver () {
+      this.getReceiver(this.$route.query.idReceiver)
+        .then((result) => {
+          this.userReceiver = result.data.result[0]
+          console.log(this.userReceiver)
+          alert('succeed')
+        })
     }
+  },
+  mounted () {
+    this.handleGetReceiver()
   },
   computed: {
     ...mapGetters(['getUserData']),
@@ -84,13 +94,13 @@ export default {
       return this.getUserData.id
     },
     balanceLeft () {
-      return this.getUserData.balance - this.amount
+      return parseInt(this.getUserData.balance) - parseInt(this.$route.query.amount)
     },
     props () {
       return {
-        amount: this.amount,
-        notes: this.notes,
-        idReceiver: this.idReceiver
+        amount: this.$route.query.amount,
+        notes: this.$route.query.notes,
+        idReceiver: this.$route.query.idReceiver
       }
     }
   }
@@ -98,6 +108,9 @@ export default {
 </script>
 
 <style scoped>
+* {
+  box-sizing: content-box;
+}
 .transfer-to {
   background: #ffffff;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
@@ -129,13 +142,18 @@ export default {
   background: #ffffff;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
   border-radius: 10px;
+  padding:10px;
 }
 
 .receiver .thumbnail-photo {
   grid-area: thumbnail-photo;
   margin: auto auto;
 }
-
+.photo {
+  width:100%;
+  height:100%;
+  object-fit: cover;
+}
 .receiver .detail-username {
   grid-area: detail-username;
   margin: auto 0 auto 20px;
@@ -170,6 +188,7 @@ export default {
 .transfer-to .transfer-to-user {
   grid-area: transfer-to-user;
   margin: 0 30px 0 30px;
+  box-sizing: border-box;
 }
 
 .transfer-to .details-transfer {

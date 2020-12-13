@@ -10,11 +10,19 @@
     <div class="transfer-to-user">
       <div class="receiver">
         <div class="thumbnail-photo">
-          <img src="/img/1-70x70.png" alt="" />
+          <img
+            class="photo"
+            :src="
+              userReceiver.photo === null
+                ? '/img/user-avatar.png'
+                : userReceiver.photo
+            "
+            alt=""
+          />
         </div>
         <div class="detail-username">
-          <p class="username">Samuel Suhi</p>
-          <p class="telephone">+62 813-8492-9994</p>
+          <p class="username">{{ userReceiver.firstName }}</p>
+          <p class="telephone">{{ userReceiver.phoneNumber }}</p>
         </div>
       </div>
     </div>
@@ -24,7 +32,7 @@
           <p>Amount</p>
         </div>
         <div class="amount-money bold gap">
-          <p>{{ detailTransfer.amount }}</p>
+          <p>Rp. {{ detailTransfer.amount }}</p>
         </div>
       </div>
       <div class="balance-left">
@@ -32,7 +40,7 @@
           <p>Balance Left</p>
         </div>
         <div class="balance-money bold gap">
-          <p>{{ handleBalanceLeft }}</p>
+          <p>Rp. {{ handleBalanceLeft }}</p>
         </div>
       </div>
       <div class="date-time">
@@ -54,43 +62,122 @@
     </div>
     <div class="button-continue">
       <button class="share"><img src="/img/share-icon.png" alt="" /></button>
-      <button class="info-button">Back To Home</button>
-      <button class="download-pdf">Download PDF</button>
+      <button class="info-button" @click="backToHome">Back To Home</button>
+      <button class="download-pdf" @click.prevent="print">Download PDF</button>
     </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import dateFormat from 'dateformat'
+import JSPDF from 'jspdf'
+import 'jspdf-autotable'
 export default {
   name: 'StatusSucceed',
   data () {
     return {
-      detailTransfer: null
+      userReceiver: null,
+      detailTransfer: null,
+      detailTransferByFirstName: null
     }
   },
   methods: {
-    ...mapActions(['getDetailTransferById']),
+    ...mapActions([
+      'getDetailTransferById',
+      'getDetailTransferByFirstName',
+      'getReceiver'
+    ]),
     handleGetDetailTransferById () {
-      this.getDetailTransferById(this.$route.params.idTransfer)
-        .then(results => {
-          this.detailTransfer = results.data.result[0]
+      this.getDetailTransferById(this.$route.query.idTransfer).then(results => {
+        this.detailTransfer = results.data.result[0]
+        const payload = {
+          firstName: this.handleFirstName
+        }
+        this.getDetailTransferByFirstName(payload).then(res => {
+          console.log(res)
+          this.detailTransferByFirstName = res.data.result[0]
         })
+      })
+    },
+    handleGetReceiver () {
+      this.getReceiver(this.$route.query.idReceiver).then(result => {
+        this.userReceiver = result.data.result[0]
+        console.log('berhasil ke get receiver')
+        console.log(result.data.result[0])
+      })
+    },
+    print () {
+      const doc = new JSPDF()
+      const now = new Date()
+      const dateNow = dateFormat(now, 'isoDateTime')
+
+      doc.setFontSize(30)
+      doc.setTextColor(99, 121, 244)
+      doc.text('Zwallet', 20, 22)
+      doc.setFontSize(11)
+      doc.setTextColor(100)
+
+      // jsPDF 1.4+ uses getWidth, <1.4 uses .width
+      var pageSize = doc.internal.pageSize
+      var pageWidth = pageSize.width ? pageSize.width : pageSize.getWidth()
+      var text = doc.splitTextToSize(
+        'The following are details of your most recent transfer transaction:',
+        pageWidth - 35,
+        {}
+      )
+      doc.text(text, 14, 30)
+
+      doc.autoTable({
+        head: [['Sender', 'Receiver', 'Amount', 'Notes', 'Transfer Date']],
+        body: [
+          [
+            `${this.detailTransferByFirstName.Sender}`,
+            `${this.detailTransferByFirstName.Receiver}`,
+            `Rp. ${this.detailTransferByFirstName.amount}`,
+            `${this.detailTransferByFirstName.notes}`,
+            `${this.detailTransferByFirstName.transferDate}`
+          ]
+        ],
+        startY: 40,
+        showHead: 'firstPage'
+      })
+      doc.text(`Your remaining balance : Rp. ${this.handleBalanceLeft}`, 14, doc.lastAutoTable.finalY + 10)
+      doc.text(
+        'Thank you for using zwallet :)',
+        14,
+        doc.lastAutoTable.finalY + 20
+      )
+
+      doc.save(`Transfer-${dateNow}`)
+    },
+    backToHome () {
+      this.$router.push('/home/home')
     }
   },
   mounted () {
     this.handleGetDetailTransferById()
+    this.handleGetReceiver()
   },
   computed: {
     ...mapGetters(['getUserData']),
     handleBalanceLeft () {
-      return parseInt(this.getUserData.balance) - parseInt(this.detailTransfer.amount)
+      return (
+        parseInt(this.getUserData.balance) -
+        parseInt(this.detailTransfer.amount)
+      )
+    },
+    handleFirstName () {
+      return this.getUserData.firstName
     }
   }
 }
 </script>
 
 <style scoped>
+* {
+  box-sizing: border-box;
+}
 .transfer-to {
   background: #ffffff;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
@@ -107,7 +194,6 @@ export default {
     "button-continue";
   gap: 30px 0;
 }
-
 .info-succeed {
   grid-area: info-succeed;
 
@@ -151,11 +237,17 @@ export default {
   background: #ffffff;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
   border-radius: 10px;
+  padding: 20px;
 }
 
 .receiver .thumbnail-photo {
   grid-area: thumbnail-photo;
   margin: auto auto;
+}
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .receiver .detail-username {
