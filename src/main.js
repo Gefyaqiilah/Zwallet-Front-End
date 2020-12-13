@@ -15,6 +15,12 @@ Vue.use(new VueSocketIO({
   connection: io(`${process.env.VUE_APP_SERVICE_API}`)
 }))
 
+Vue.directive('capitalizeText', {
+  bind: function (el, binding) {
+    el.style.textTransform = 'capitalize'
+  }
+})
+
 new Vue({
   router,
   store,

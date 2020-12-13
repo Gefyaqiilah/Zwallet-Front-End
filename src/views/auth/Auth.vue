@@ -6,7 +6,7 @@
       <div class="row">
         <div class="side-left col-sm-12 col-md-6">
                 <div class="container">
-                    <h1 class="logo">Zwallet</h1>
+                    <h1 class="logo"><router-link to="/" style="text-decoration:none; color:white;">Zwallet</router-link></h1>
                     <div class="phone-group">
                         <img src="/img/phone-group.png" alt="Vector 3" class="img-fluid vector-3">
                     </div>

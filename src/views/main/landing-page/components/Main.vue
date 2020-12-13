@@ -11,7 +11,7 @@
                     We bring you a mobile app for banking problems that
                     oftenly wasting much of your times.
                 </p>
-                <button class="try-it-free-btn btn-text-white">Try It Free</button>
+                <button @click="toSignUp" class="try-it-free-btn btn-text-white">Try It Free</button>
           </div>
           <div class="col-lg-6 col-md-12 col-sm-12 side-right">
               <img src="/img/png-phone-3.png" alt="" class="phone-absolute">
@@ -181,7 +181,12 @@
 
 <script>
 export default {
-  name: 'Main'
+  name: 'Main',
+  methods: {
+    toSignUp () {
+      this.$router.push('/auth/signup')
+    }
+  }
 }
 </script>
 

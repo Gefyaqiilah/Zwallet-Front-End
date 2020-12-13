@@ -6,6 +6,7 @@ import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import router from '../router'
 import createPersistedState from "vuex-persistedstate"
+import Swal from 'sweetalert2'
 
 Vue.use(Vuex)
 
@@ -122,7 +123,9 @@ export default new Vuex.Store({
     async getReceiver (context, payload) {
       return new Promise((resolve, reject) => {
         try {
-          const dataReceiver = axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/users/${payload}`)
+          const dataReceiver = axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/users/${payload}`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
+          })
           resolve(dataReceiver)
         } catch (error) {
           reject(error)
@@ -166,7 +169,12 @@ export default new Vuex.Store({
         const responseMessage = response.data.result.message
         if (responseStatus === 200) {
           if (responseMessage === 'transfer successfully') {
-            alert('transfer successfully')
+            Swal.fire({
+              icon: 'success',
+              title: 'transfer successfully',
+              showConfirmButton: false,
+              timer: 1500
+            })
             return router.push({ name: 'StatusSucceed', query: { idTransfer: response.data.result.idTransfer, idReceiver: response.data.result.idReceiver } })
           }
         }
@@ -218,6 +226,7 @@ export default new Vuex.Store({
             context.commit('REMOVE_USERDATA')
             context.commit('REMOVE_ALLTOKEN')
             context.commit('REMOVE_ALL_LOCAL_STORAGE')
+            context.commit('CLEAR_INTERVAL_SOCKET_IO')
             router.push('/auth/login')
           } else if (errorMessage === 'Forbidden: Token cannot be empty') {
             context.commit('REMOVE_USERDATA')

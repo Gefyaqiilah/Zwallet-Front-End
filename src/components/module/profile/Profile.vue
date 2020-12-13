@@ -25,7 +25,7 @@
           >
       </div>
       <div class="profile-name">
-        <h1>{{this.token.firstName}}</h1>
+        <h1 v-capitalizeText="true">{{this.token.firstName}}</h1>
         <p>{{this.token.phoneNumber}}</p>
       </div>
     </div>
@@ -73,6 +73,7 @@
 <script>
 import $ from 'jquery'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 export default {
   name: 'Profile',
   props: ['token'],
@@ -93,15 +94,31 @@ export default {
           }
           const form = new FormData()
           form.append('photo', document.getElementById('imageUpload').files[0])
-          axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/photo/${id}`, form, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
+          Swal.fire({
+            title: 'Are you sure?',
+            icon: 'question',
+            text: 'change your profile photo?',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, I want to change!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/photo/${id}`, form, {
+                headers: {
+                  'Content-Type': 'multipart/form-data'
+                }
+              })
+                .then(() => {
+                  Swal.fire(
+                    'Succeed!',
+                    'photo has been changed successfully.',
+                    'success'
+                  )
+                  reader.readAsDataURL(this.files[0])
+                })
             }
           })
-            .then(() => {
-              reader.readAsDataURL(this.files[0])
-              alert('photo has been changed successfully')
-            })
         }
       })
     }

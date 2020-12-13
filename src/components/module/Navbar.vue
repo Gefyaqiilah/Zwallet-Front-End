@@ -2,15 +2,15 @@
   <nav>
     <div class="container-fluid row">
         <div class="col-12 col-sm-6 col-md-6 nav-left">
-            <h1 class>Zwallet</h1>
+            <h1><router-link to="/home" style="text-decoration:none;">Zwallet</router-link></h1>
         </div>
         <div class="col-12 col-sm-6  col-md-6 nav-right">
             <div class="account-info">
                 <div class="user-photo">
                     <img class="photo" :src="getUserData.photo === null? '/img/user-avatar.png' :getUserData.photo" alt="">
                 </div>
-                <h1 style="text-transform:capitalize;">{{getUserData.firstName +' '}} {{getUserData.lastName !== null? getUserData.lastName : ''}}</h1>
-                <p>{{getUserData.phoneNumber !== null ? getUserData.phoneNumber : 'phone number has not been added'}}</p>
+                <h1 v-capitalizeText="true">{{getUserData.firstName +' '}} {{getUserData.lastName !== null? getUserData.lastName : ''}}</h1>
+                <p>{{getUserData.phoneNumber ? getUserData.phoneNumber : 'phone number has not been added'}}</p>
                 <div class="notification">
                     <img src="/img/bell.png" class="notification" alt="">
                 </div>

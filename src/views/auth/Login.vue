@@ -56,7 +56,7 @@
         <button v-on:click.prevent="handleLogin" class="btn-login">Login</button>
       </div>
       <div class="col-md-9 signup-position">
-        <p>Don’t have an account? Let’s <span class="signup">Sign Up</span></p>
+        <p>Don’t have an account? Let’s <span class="signup"><router-link :to="'/auth/signup'">Sign Up</router-link></span></p>
       </div>
     </form>
   </div>
@@ -65,6 +65,7 @@
 <script>
 import $ from 'jquery'
 import { mapActions } from 'vuex'
+import Swal from 'sweetalert2'
 export default {
   name: 'Login',
   data () {
@@ -82,7 +83,13 @@ export default {
       }
       this.login(payload)
         .then(res => {
-          alert('Login successful')
+          Swal.fire({
+            icon: 'success',
+            title: 'Login Success',
+            text: 'Hello, Welcome Back :)',
+            showConfirmButton: false,
+            timer: 3000
+          })
           this.$router.push('/home')
         })
     },

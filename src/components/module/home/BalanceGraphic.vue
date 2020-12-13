@@ -13,7 +13,9 @@
       </div>
   </div>
   <div class="graphic">
-          <img src="/img/graphic.png" alt="">
+    <div class="thumbnail-photo">
+          <img class="photo" src="/img/graphic.png" alt="">
+    </div>
   </div>
 </div>
 </template>
@@ -57,12 +59,17 @@ export default {
   /* background-color: rgb(78, 6, 6); */
   display: block;
   /* width: 80%; */
-  margin: auto auto 0 auto;
   text-align: center;
+  padding:10px;
 }
-
-.balance-graphic .graphic img {
-  width: max-content;
+.thumbnail-photo {
+  margin:auto auto;
+  width:80%;
+}
+.photo {
+  width:100%;
+  height:100%;
+  object-fit: contain;
 }
 @media screen and (max-width:400px){
 .balance-graphic .graphic img {

@@ -8,10 +8,10 @@
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto mr-5">
               <li class="nav-item active mr-5">
-              <button class="login-btn btn-text-white"><router-link class="btn-text-white" to="/auth/login">Login</router-link></button>
+              <button @click="toLogin" class="login-btn btn-text-white">Login</button>
               </li>
               <li class="nav-item">
-                  <button class="signup-btn btn-text-purple"><router-link class="btn-text-purple" to="/auth/signup">Sign Up</router-link></button>
+                  <button @click="toSignUp" class="signup-btn btn-text-purple">Sign Up</button>
               </li>
             </ul>
             </div>
@@ -24,6 +24,14 @@ import $ from 'jquery'
 
 export default {
   name: 'Header',
+  methods: {
+    toLogin () {
+      this.$router.push('/auth/login')
+    },
+    toSignUp () {
+      this.$router.push('/auth/signup')
+    }
+  },
   mounted () {
     $(function () {
       $(document).scroll(function () {

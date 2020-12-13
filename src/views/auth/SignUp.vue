@@ -83,7 +83,7 @@
         </button>
       </div>
       <div class="col-md-9 signup-position">
-        <p>Already have an account? Let’s <span class="signup">Login</span></p>
+        <p>Already have an account? Let’s <router-link :to="'/auth/login'"><span class="signup">Login</span></router-link></p>
       </div>
     </form>
   </div>

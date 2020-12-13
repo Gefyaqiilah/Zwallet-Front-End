@@ -35,6 +35,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import Swal from 'sweetalert2'
 export default {
   name: 'Menu',
   data () {
@@ -50,7 +51,13 @@ export default {
     handleLogOut () {
       this.logOut()
       this.$router.push('/auth')
-      alert('Logout successfull')
+      Swal.fire({
+        icon: 'success',
+        title: 'Logout Success',
+        text: 'See you again :)',
+        showConfirmButton: false,
+        timer: 3000
+      })
     },
     toHome () {
       this.$router.push('/auth')

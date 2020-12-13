@@ -5,7 +5,7 @@
           <div class="col-12 col-sm-6 col-md-6">
               <p class="mt-4 ml-2 balance">Balance</p>
               <h1 class="ml-2 balance-amount">Rp.{{getUserData.balance}}</h1>
-              <p class="ml-2 telephone">{{getUserData.phoneNumber !== null ? getUserData.phoneNumber : 'phone number has not been added'}}</p>
+              <p class="ml-2 telephone">{{getUserData.phoneNumber ? getUserData.phoneNumber : 'phone number has not been added'}}</p>
           </div>
           <div class="col-12 col-sm-6 col-md-6">
               <div class="row justify-content-end mt-4 mr-3">

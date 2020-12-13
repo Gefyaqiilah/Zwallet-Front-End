@@ -33,6 +33,7 @@
 <script>
 import $ from 'jquery'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 export default {
   name: 'AddPhoneNumber',
   props: ['token'],
@@ -65,7 +66,12 @@ export default {
       }
       try {
         await axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/${id}`, dataUpdate)
-        alert('Phone number has been successfully added')
+        Swal.fire({
+          icon: 'success',
+          title: 'Phone number has been successfully added',
+          showConfirmButton: false,
+          timer: 1500
+        })
         this.$router.replace('/home')
       } catch (error) {
       }

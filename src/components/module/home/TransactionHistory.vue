@@ -26,6 +26,7 @@
 <script>
 import axios from 'axios'
 import { mapMutations, mapActions } from 'vuex'
+import Swal from 'sweetalert2'
 export default {
   name: 'TransactionHistory',
   data () {
@@ -70,12 +71,28 @@ export default {
         this.REMOVE_ALL_LOCAL_STORAGE()
         return this.$router.push('/auth/login')
       }
-      this.deleteTransactionTransferById(id)
-        .then(() => {
-          const filter = this.dataTransfer.filter((data) => data.idTransfer !== id)
-          this.dataTransfer = filter
-          alert('succeed delete transfers history')
-        })
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.deleteTransactionTransferById(id)
+            .then(() => {
+              const filter = this.dataTransfer.filter((data) => data.idTransfer !== id)
+              this.dataTransfer = filter
+              Swal.fire(
+                'Deleted!',
+                'Your transfer transaction has been deleted.',
+                'success'
+              )
+            })
+        }
+      })
     }
   },
   mounted () {

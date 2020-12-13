@@ -51,7 +51,7 @@ press continue to the next steps.
 </template>
 
 <script>
-import axios from 'axios'
+import Swal from 'sweetalert2'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'InputAmount',
@@ -71,30 +71,14 @@ export default {
           this.userReceiver.push(...results.data.result)
         })
     },
-    async transfer (e) {
-      e.preventDefault()
-      if (this.getUserData.balance < this.inputAmount) {
-        alert('Oops! Sorry your balance is not enough')
-      } else {
-        const data = {
-          idSender: JSON.parse(localStorage.getItem('dataUser')).id,
-          idReceiver: this.$route.params.idUser,
-          amount: this.inputAmount,
-          notes: this.inputNotes
-        }
-        try {
-          await axios.post(`${process.env.VUE_APP_SERVICE_API}/v1/transfers`, data)
-          alert('Transfer successfully !')
-        } catch (error) {
-          if (error.response.data.err.message === 'Sender Balance is not enough for transfer') {
-            alert('Your Balance is not enough for transfers')
-          }
-        }
-      }
-    },
     async toConfirmation () {
       if (parseInt(this.getUserData.balance) <= parseInt(this.inputAmount)) {
-        alert('Oops! Sorry your balance is not enough')
+        return Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Your balance is not enough :(',
+          footer: '<a href>Why do I have this issue?</a>'
+        })
       } else {
         this.$router.push({
           name: 'Confirmation', query: { idReceiver: this.$route.params.idUser, amount: this.inputAmount, notes: this.inputNotes }

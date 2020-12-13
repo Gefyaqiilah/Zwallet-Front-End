@@ -74,6 +74,7 @@ import dateFormat from 'dateformat'
 import JSPDF from 'jspdf'
 import 'jspdf-autotable'
 import mixin from '../../../mixins/index'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'StatusSucceed',
@@ -150,6 +151,12 @@ export default {
       )
 
       doc.save(`Transfer-${dateNow}`)
+      Swal.fire({
+        icon: 'success',
+        title: 'downloaded successfully',
+        showConfirmButton: false,
+        timer: 1500
+      })
     }
   },
   mounted () {

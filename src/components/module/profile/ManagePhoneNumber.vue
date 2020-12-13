@@ -7,22 +7,22 @@
         number.
       </p>
     </div>
-    <div v-if="userData.phoneNumber" class="details-phone-number">
+    <div v-if="getUserData.phoneNumber" class="details-phone-number">
       <div class="details-number">
         <div class="details-phone-title title gap">
           <p>Primary</p>
         </div>
         <div class="bold gap phone-grid">
-          <p class="number">{{ userData.phoneNumber }}</p>
+          <p class="number">{{ getUserData.phoneNumber }}</p>
         <div class="delete">
-          <router-link :to="'/home/editphonenumber'+'?type=primary'"><img src="/img/edit-2.png" alt="" /></router-link>
+          <!-- <router-link :to="'/home/editphonenumber'+'?type=primary'"><img src="/img/edit-2.png" alt="" /></router-link> -->
           <img @click.prevent="handleDeletePhoneNumber('primary')" src="/img/trash.png" alt="" />
 
         </div>
         </div>
       </div>
     </div>
-    <div v-if="!userData.phoneNumber" class="details-phone-number">
+    <div v-if="!getUserData.phoneNumber" class="details-phone-number">
       <div class="details-number">
         <div class="details-phone-title title gap">
           <p>Add Primary Phone Number</p>
@@ -35,21 +35,21 @@
         </div>
       </div>
     </div>
-    <div v-if="userData.phoneNumberSecond" class="details-phone-number">
+    <div v-if="getUserData.phoneNumberSecond" class="details-phone-number">
       <div class="details-number">
         <div class="details-phone-title title gap">
           <p>Secondary</p>
         </div>
         <div class="bold gap phone-grid">
-          <p class="number">{{ userData.phoneNumberSecond }}</p>
+          <p class="number">{{ getUserData.phoneNumberSecond }}</p>
         <div class="delete">
-          <router-link :to="'/home/editphonenumber'+'?type=secondary'"><img src="/img/edit-2.png" alt="" /></router-link>
+          <!-- <router-link :to="'/home/editphonenumber'+'?type=secondary'"><img src="/img/edit-2.png" alt="" /></router-link> -->
           <img @click.prevent="handleDeletePhoneNumber('secondary')" src="/img/trash.png" alt="" />
         </div>
         </div>
       </div>
     </div>
-    <div v-if="!userData.phoneNumberSecond" class="details-phone-number">
+    <div v-if="!getUserData.phoneNumberSecond" class="details-phone-number">
       <div class="details-number">
         <div class="details-phone-title title gap">
           <p>Add Secondary Phone Number</p>
@@ -67,6 +67,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import Swal from 'sweetalert2'
 export default {
   name: 'ManagePhoneNumber',
   props: ['token'],
@@ -79,22 +80,41 @@ export default {
     ...mapActions(['deletePhoneNumber']),
     handleDeletePhoneNumber (type) {
       let data = null
+      let check = ''
       if (type === 'primary') {
         data = { phoneNumber: '' }
+        check = 'primary'
       } else if (type === 'secondary') {
         data = { phoneNumberSecond: '' }
+        check = 'secondary'
       }
-      alert(data)
       const payload = {
         idUser: this.handleIdUser,
         phoneNumber: {
           ...data
         }
       }
-      this.deletePhoneNumber(payload)
-        .then(() => {
-          alert('successfully deleted the phone number')
-        })
+
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.deletePhoneNumber(payload)
+            .then(() => {
+              Swal.fire(
+                'Deleted!',
+                'Your ' + check + ' phone number has been deleted.',
+                'success'
+              )
+            })
+        }
+      })
     }
   },
   computed: {
