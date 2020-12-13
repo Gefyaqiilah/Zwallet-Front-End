@@ -2,25 +2,25 @@
 <div class="menu">
   <div class="container">
       <div class="menu-grid">
-          <div class="menu-dashboard">
+          <div class="menu-dashboard" @click="toHome">
               <div class="location"><img v-if="this.$route.name ===  'HomeComponent'" src="/img/icon-menu-ruler.png" class="menu-icon" alt=""></div>
-              <div class=""><router-link to="/home/home"><img src="/img/icon-menu-grid.png" class="menu-icon" alt=""></router-link></div>
-              <div class="menu-name active"><router-link class="decoration" to="/home/home">Dashboard</router-link></div>
+              <div class=""><router-link to="/home/home"><img :src="this.$route.name ===  'HomeComponent'?'/img/grid-purple.png':'/img/grid.png'" class="menu-icon" alt=""></router-link></div>
+              <div :class="this.$route.name === 'HomeComponent' ? 'menu-name active' : 'menu-name'">Dashboard</div>
           </div>
-          <div class="menu-transfer">
+          <div class="menu-transfer" @click="toTransfer">
               <div class="location"><router-link to="/home/searchreceiver"><img v-if="this.$route.name ===  'SearchReceiver'" src="/img/icon-menu-ruler.png" class="menu-icon" alt=""></router-link></div>
-              <div class=""><router-link to="/home/searchreceiver"><img src="/img/icon-menu-arrow-up.png" class="menu-icon" alt=""></router-link></div>
-              <div class="menu-name"><router-link class="color-text" to="/home/searchreceiver">Transfer</router-link></div>
+              <div class=""><router-link to="/home/searchreceiver"><img :src="this.$route.name === 'SearchReceiver' ?'/img/icon-menu-arrow-up-purple.png':'/img/icon-menu-arrow-up.png'" class="menu-icon" alt=""></router-link></div>
+              <div :class="this.$route.name === 'SearchReceiver' ? 'menu-name active' : 'menu-name'">Transfer</div>
           </div>
-          <div class="menu-topup">
+          <div class="menu-topup" @click="toTopUp">
               <div class="location"><img v-if="this.$route.name ===  'TopUp'" src="/img/icon-menu-ruler.png" class="menu-icon" alt=""></div>
-              <div class=""><router-link to="/home/topup"><img src="/img/icon-menu-plus.png" class="menu-icon" alt=""></router-link></div>
-              <div class="menu-name"><router-link class="color-text" to="/home/topup">Top Up</router-link></div>
+              <div class=""><router-link to="/home/topup"><img :src="this.$route.name === 'TopUp' ?'/img/icon-menu-plus-purple.png':'/img/icon-menu-plus.png'" class="menu-icon" alt=""></router-link></div>
+              <div :class="this.$route.name === 'TopUp' ? 'menu-name active' : 'menu-name'">Top Up</div>
           </div>
-          <div class="menu-profile">
+          <div class="menu-profile" @click="toProfile">
               <div class="location"><img v-if="this.$route.name ===  'Profile'" src="/img/icon-menu-ruler.png" class="menu-icon" alt=""></div>
-              <div class=""><router-link to="/home/profile"><img src="/img/icon-menu-profile.png" class="menu-icon" alt=""></router-link></div>
-              <div class="menu-name"><router-link class="color-text" to="/home/profile">Profile</router-link></div>
+              <div class=""><router-link to="/home/profile"><img :src="this.$route.name === 'Profile' ?'/img/icon-menu-user-purple.png':'/img/icon-menu-profile.png'" class="menu-icon" alt=""></router-link></div>
+              <div :class="this.$route.name === 'Profile' ? 'menu-name active' : 'menu-name'">Profile</div>
 
           </div>
           <div class="menu-logout" :style="styling" v-if="Object.keys(userData).length > 0" v-on:click.prevent="handleLogOut">
@@ -60,16 +60,16 @@ export default {
       })
     },
     toHome () {
-      this.$router.push('/auth')
+      this.$router.push('/home/home')
     },
     toTransfer () {
-      this.router.push('/transfer')
+      this.$router.push('/home/searchreceiver')
     },
     toTopUp () {
-      this.router.push('/topup')
+      this.$router.push('/home/topup')
     },
     toProfile () {
-      this.router.push('/profile')
+      this.$router.push('/home/profile')
     }
   }
 }
@@ -124,6 +124,7 @@ export default {
     display: grid;
     grid-template-columns: 0.3fr 1fr 3fr;
    margin:auto 0 50px 0;
+   cursor: pointer;
 }
 
 .menu .menu-name {
@@ -133,6 +134,7 @@ export default {
     font-size: 18px;
     line-height: 31px;
     color: rgba(58, 61, 66, 0.8);
+    cursor: pointer;
 
 }
 

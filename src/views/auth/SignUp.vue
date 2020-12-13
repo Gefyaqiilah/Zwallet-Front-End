@@ -92,16 +92,38 @@
 <script>
 import $ from 'jquery'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 export default {
   name: 'SignUp',
   data () {
     return {
       username: '',
       password: '',
-      email: ''
+      email: '',
+      errors: []
     }
   },
   methods: {
+    checkForm () {
+      if (!this.username) {
+        this.errors.push('Name required')
+      }
+      if (!this.password) {
+        this.errors.push('Password required')
+      }
+      if (!this.email) {
+        this.errors.push('Email required')
+      }
+      if (this.errors.length > 0) {
+        return Swal.fire({
+          icon: 'error',
+          title: 'Input required',
+          text: [...this.errors],
+          showConfirmButton: false,
+          timer: 1000
+        })
+      }
+    },
     detectInputInserted () {
       $(document).on('change', function () {
         const buttonSignUp = document.querySelector('.btn-signup')
@@ -127,16 +149,23 @@ export default {
       }
     },
     signUpUser () {
-      return axios
-        .post(`${process.env.VUE_APP_SERVICE_API}/v1/users/register`, {
-          firstName: this.username,
-          email: this.email,
-          password: this.password
-        })
+      this.checkForm()
+      axios.post(`${process.env.VUE_APP_SERVICE_API}/v1/users/register`, {
+        firstName: this.username,
+        email: this.email,
+        password: this.password
+      })
         .then(() => {
-          alert(
-            'Your account has been successfully created. Check your email for verification'
-          )
+          Swal.fire({
+            title: 'Sweet!',
+            text: 'Your account has been successfully created. Check your email for verification',
+            imageUrl: 'https://media.giphy.com/media/3oEdv9OpWdiMIcCnYc/giphy.gif',
+            imageWidth: 400,
+            imageHeight: 200,
+            imageAlt: 'Custom image',
+            showConfirmButton: false,
+            timer: 4000
+          })
           this.clearForm()
           this.$router.replace('/auth/login')
         })

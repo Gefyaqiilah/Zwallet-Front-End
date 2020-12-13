@@ -6,9 +6,9 @@
           <img
             class="photo"
             :src="
-              this.token.photo === null
+              getUserData.photo === null
                 ? '/img/user-avatar.png'
-                : this.token.photo
+                : getUserData.photo
             "
             alt=""
           />
@@ -58,7 +58,7 @@
           <img src="/img/arrow-left.png" alt="" />
         </div>
       </div>
-      <div class="logout list-menu">
+      <div class="logout list-menu" @click="handleLogOut">
         <div class="list-menu-left">
           <p>Logout</p>
         </div>
@@ -74,6 +74,7 @@
 import $ from 'jquery'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Profile',
   props: ['token'],
@@ -88,10 +89,6 @@ export default {
       const id = this.id
       $('#imageUpload').change(function () {
         if (this.files && this.files[0]) {
-          var reader = new FileReader()
-          reader.onload = function (e) {
-            $('.photo').attr('src', e.target.result)
-          }
           const form = new FormData()
           form.append('photo', document.getElementById('imageUpload').files[0])
           Swal.fire({
@@ -115,16 +112,30 @@ export default {
                     'photo has been changed successfully.',
                     'success'
                   )
-                  reader.readAsDataURL(this.files[0])
                 })
             }
           })
         }
       })
+    },
+    ...mapActions(['logOut']),
+    handleLogOut () {
+      this.logOut()
+      this.$router.push('/auth')
+      Swal.fire({
+        icon: 'success',
+        title: 'Logout Success',
+        text: 'See you again :)',
+        showConfirmButton: false,
+        timer: 3000
+      })
     }
   },
   mounted () {
     this.updateImage()
+  },
+  computed: {
+    ...mapGetters(['getUserData'])
   }
 }
 </script>
@@ -224,6 +235,9 @@ export default {
 .list-menu-right img {
   display: block;
   margin: 20px 0;
+}
+.logout {
+     cursor: pointer;
 }
 @media screen and (max-width: 992px) {
   .detail-profile {

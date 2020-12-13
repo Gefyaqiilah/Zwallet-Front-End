@@ -46,6 +46,15 @@
               aria-describedby="basic-addon1"
               required
             />
+                    <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1"
+            ><img
+              v-on:click="showPassword"
+              id="btnShowPassword"
+              src="/img/eye-crossed.png"
+              alt=""
+          /></span>
+            </div>
           </div>
         </div>
       </div>
@@ -88,7 +97,7 @@ export default {
             title: 'Login Success',
             text: 'Hello, Welcome Back :)',
             showConfirmButton: false,
-            timer: 3000
+            timer: 1000
           })
           this.$router.push('/home')
         })

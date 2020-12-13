@@ -73,7 +73,7 @@ export default {
     },
     async toConfirmation () {
       if (parseInt(this.getUserData.balance) <= parseInt(this.inputAmount)) {
-        return Swal.fire({
+        Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: 'Your balance is not enough :(',

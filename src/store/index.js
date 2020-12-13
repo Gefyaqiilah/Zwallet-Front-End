@@ -185,13 +185,23 @@ export default new Vuex.Store({
 
         if (errorStatus === 404) {
           if (errorMessage === 'Email or password you entered is incorrect.') {
-            alert('Email or password invalid')
+            Swal.fire({
+              icon: 'error',
+              title: 'Email or password invalid',
+              showConfirmButton: true,
+              timer: 1000
+            })
           }
         } else if (errorStatus === 500) {
           if (errorMessage === 'Sender Balance is not enough for transfer') {
             alert('Oops! Your balance is not enough')
           } else {
-            alert('Oops! Sorry Looks like server having trouble')
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops! Sorry Looks like server having trouble',
+              showConfirmButton: true,
+              timer: 1000
+            })
             return router.push('/home')
           }
         } else if (errorStatus === 401) {
