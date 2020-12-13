@@ -54,7 +54,7 @@ export default {
         this.sockets.subscribe('getUserData', data => {
           this.SET_FROM_IO(data[0])
         })
-      }, 10000))
+      }, 5000))
     }
   },
   computed: {

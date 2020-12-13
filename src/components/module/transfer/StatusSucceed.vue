@@ -73,8 +73,11 @@ import { mapActions, mapGetters } from 'vuex'
 import dateFormat from 'dateformat'
 import JSPDF from 'jspdf'
 import 'jspdf-autotable'
+import mixin from '../../../mixins/index'
+
 export default {
   name: 'StatusSucceed',
+  mixins: [mixin],
   data () {
     return {
       userReceiver: null,
@@ -147,9 +150,6 @@ export default {
       )
 
       doc.save(`Transfer-${dateNow}`)
-    },
-    backToHome () {
-      this.$router.push('/home/home')
     }
   },
   mounted () {

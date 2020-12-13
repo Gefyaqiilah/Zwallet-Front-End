@@ -223,6 +223,7 @@ export default new Vuex.Store({
             context.commit('REMOVE_USERDATA')
             context.commit('REMOVE_ALLTOKEN')
             context.commit('REMOVE_ALL_LOCAL_STORAGE')
+            context.commit('CLEAR_INTERVAL_SOCKET_IO')
             router.push('/auth/login')
           } else if (errorMessage === 'email must be verified first, check the email we have sent') {
             alert('sorry your email has not been verified, please verify it first')

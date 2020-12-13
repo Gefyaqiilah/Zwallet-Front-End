@@ -12,7 +12,7 @@ Vue.config.productionTip = false
 
 Vue.use(new VueSocketIO({
   debug: true,
-  connection: io('http://localhost:4000')
+  connection: io(`${process.env.VUE_APP_SERVICE_API}`)
 }))
 
 new Vue({

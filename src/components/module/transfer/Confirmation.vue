@@ -80,6 +80,7 @@ export default {
       this.getReceiver(this.$route.query.idReceiver)
         .then((result) => {
           this.userReceiver = result.data.result[0]
+          console.log(this.userReceiver)
           alert('succeed')
         })
     }
