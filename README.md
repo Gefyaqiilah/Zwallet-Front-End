@@ -1,6 +1,6 @@
 # zwallet
 
-repo ini berisi project zwallet front-end, zwallet ini hanya terkoneksi dengan sebuah server lokal, yang sebelumnya dibuat di z-wallet back-end.
+repo ini berisi project zwallet front-end, zwallet ini hanya terkoneksi dengan server https://api-zwallet-gefy.fwdev.online, yang sebelumnya dibuat di z-wallet back-end.
 dizwallet ini memungkinkan users untuk :
 
 1.  <b>sign up</b>
@@ -8,7 +8,10 @@ dizwallet ini memungkinkan users untuk :
 3.  <b>transfer</b>
 4.  <b>cek history transfer</b>
 5.  dll
-
+## DEMO PROJECT
+https://zwallet-gefy.fwdev.online
+## ZWALLET - BACK END
+https://github.com/Gefyaqiilah/Zwallet-Back-End
 ## Screenshot zwallet 
 ![Screenshot (447)](https://user-images.githubusercontent.com/54069791/100554060-da288700-32c4-11eb-9abb-6dcbfe92fa6d.png)
 ![Screenshot (448)](https://user-images.githubusercontent.com/54069791/100554064-ddbc0e00-32c4-11eb-817c-ca5e546a44ef.png)
