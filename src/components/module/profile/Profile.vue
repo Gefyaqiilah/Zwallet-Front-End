@@ -20,8 +20,8 @@
             name="photo"
             accept="image/png,image/gif,image/jpeg,/image/jpg"
           />
-          <label style="display:block;display:flex;justify-content:center;" for="imageUpload"
-            ><img src="/img/edit-2.png" alt="" id="" /><span style="">Edit</span></label
+          <label style="display:block;display:flex;justify-content:center; flex-grow:1;" for="imageUpload"
+            ><div><img src="/img/edit-2.png" alt="" id="" /></div><span style="">Edit</span></label
           >
       </div>
       <div class="profile-name">
@@ -86,6 +86,7 @@ export default {
   },
   methods: {
     updateImage () {
+      const self = this
       const id = this.id
       $('#imageUpload').change(function () {
         if (this.files && this.files[0]) {
@@ -101,24 +102,34 @@ export default {
             confirmButtonText: 'Yes, I want to change!'
           }).then((result) => {
             if (result.isConfirmed) {
-              axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/photo/${id}`, form, {
-                headers: {
-                  'Content-Type': 'multipart/form-data'
-                }
-              })
-                .then(() => {
+              self.$awn.asyncBlock(
+                axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/photo/${id}`, form, {
+                  headers: {
+                    'Content-Type': 'multipart/form-data'
+                  }
+                }),
+                () => {
+                  self.getDetailUserData()
                   Swal.fire(
                     'Succeed!',
                     'photo has been changed successfully.',
                     'success'
                   )
-                })
+                },
+                () => {
+                  Swal.fire(
+                    'Error',
+                    'Looks like server havong trouble',
+                    'error'
+                  )
+                }
+              )
             }
           })
         }
       })
     },
-    ...mapActions(['logOut']),
+    ...mapActions(['logOut', 'getDetailUserData']),
     handleLogOut () {
       this.logOut()
       this.$router.push('/auth')
@@ -131,8 +142,9 @@ export default {
       })
     }
   },
-  mounted () {
+  async mounted () {
     this.updateImage()
+    await this.getDetailUserData()
   },
   computed: {
     ...mapGetters(['getUserData'])

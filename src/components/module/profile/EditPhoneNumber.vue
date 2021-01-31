@@ -33,6 +33,7 @@
 <script>
 import $ from 'jquery'
 import axios from 'axios'
+import { mapActions } from 'vuex'
 export default {
   name: 'EditPhoneNumber',
   props: ['token'],
@@ -43,6 +44,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['getDetailUserData']),
     detectInputInserted () {
       $(document).on('change', function () {
         const buttonSignUp = document.querySelector('.change-password-btn')
@@ -71,8 +73,9 @@ export default {
       }
     }
   },
-  mounted () {
+  async mounted () {
     this.detectInputInserted()
+    await this.getDetailUserData()
   }
 }
 </script>

@@ -7,11 +7,11 @@
         <div class="col-12 col-sm-6  col-md-6 nav-right">
             <div class="account-info">
                 <div class="user-photo">
-                    <img class="photo" :src="getUserData.photo === null? '/img/user-avatar.png' :getUserData.photo" alt="">
+                    <img class="photo cursor-pointer" @click="toProfile" :src="getUserData.photo === null? '/img/user-avatar.png' :getUserData.photo" alt="">
                 </div>
-                <h1 v-capitalizeText="true">{{getUserData.firstName +' '}} {{getUserData.lastName !== null? getUserData.lastName : ''}}</h1>
-                <p>{{getUserData.phoneNumber ? getUserData.phoneNumber : 'phone number has not been added'}}</p>
-                <div class="notification">
+                <h1 class="cursor-pointer" @click="toPersonalInformation" v-capitalizeText="true">{{getUserData.firstName +' '}} {{getUserData.lastName !== null? getUserData.lastName : ''}}</h1>
+                <p class="cursor-pointer" @click="toPersonalInformation">{{getUserData.phoneNumber ? getUserData.phoneNumber : 'phone number has not been added'}}</p>
+                <div class="notification cursor-pointer">
                     <img src="/img/bell.png" class="notification" alt="">
                 </div>
             </div>
@@ -37,6 +37,12 @@ export default {
     token: Object
   },
   methods: {
+    toProfile () {
+      this.$router.push('/home/profile')
+    },
+    toPersonalInformation () {
+      this.$router.push('/home/personalinformation')
+    }
   },
   computed: {
     ...mapGetters(['getUserData'])
@@ -145,5 +151,7 @@ nav {
     margin: 50px auto 50px auto;
   }
 }
-
+.cursor-pointer {
+  cursor: pointer;
+}
 </style>

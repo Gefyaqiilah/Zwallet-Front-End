@@ -75,7 +75,7 @@ export default {
     showModalPin () {
       this.$refs.modal.showModalPin()
     },
-    ...mapActions(['getReceiver']),
+    ...mapActions(['getReceiver', 'getDetailUserData']),
     handleGetReceiver () {
       this.getReceiver(this.$route.query.idReceiver)
         .then((result) => {
@@ -83,8 +83,9 @@ export default {
         })
     }
   },
-  mounted () {
+  async mounted () {
     this.handleGetReceiver()
+    await this.getDetailUserData()
   },
   computed: {
     ...mapGetters(['getUserData']),

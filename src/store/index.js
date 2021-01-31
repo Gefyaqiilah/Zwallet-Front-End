@@ -15,14 +15,18 @@ export default new Vuex.Store({
     userData: null,
     accessToken: null || localStorage.getItem('accessToken'),
     refreshToken: null || localStorage.getItem('refreshToken'),
-    intervalSocketIo: null
+    intervalSocketIo: null,
+    transactionHistory: {
+      paginations: null,
+      transactions: []
+    }
   },
   plugins: [createPersistedState()],
   mutations: {
     SET_USERDATA(state, payload) {
       state.userData = payload
-      state.accessToken = payload.accessToken
-      state.refreshToken = payload.refreshToken
+      state.accessToken = state.accessToken || payload.accessToken
+      state.refreshToken = state.refreshToken || payload.refreshToken
     },
     REMOVE_USERDATA(state, payload) {
       state.userData = null
@@ -30,6 +34,10 @@ export default new Vuex.Store({
     REMOVE_ALLTOKEN(state) {
       state.accessToken = null
       state.refreshToken = null
+    },
+    SET_TRANSACTION_HISTORY (state, payload) {
+      state.transactionHistory.pagination = payload.pagination
+      state.transactionHistory.transactions = payload.transactions
     },
     REMOVE_ALL_LOCAL_STORAGE() {
       localStorage.removeItem('vuex')
@@ -50,11 +58,13 @@ export default new Vuex.Store({
   actions: {
     login(context, payload) {
       return new Promise((resolve, reject) => {
+        context.dispatch('interceptorRequest')
         axios.post(`${process.env.VUE_APP_SERVICE_API}/v1/users/login`, payload)
           .then(results => {
             const result = results.data.result
-            const decoded = jwt.verify(result.accessToken, process.env.VUE_APP_JWT_KEY)
-            localStorage.setItem('refreshToken', result.refreshToken)
+            console.log('result :>> ', result)
+            const decoded = jwt.verify(result.accessToken, process.env.VUE_APP_JWT_KEY, result.refreshToken)
+            console.log('decoded :>> ', decoded)
             localStorage.setItem('accessToken', result.accessToken)
             const payload = {
               ...decoded,
@@ -62,6 +72,7 @@ export default new Vuex.Store({
             }
             localStorage.setItem('dataUser', JSON.stringify(payload))
             context.commit('SET_USERDATA', payload)
+            context.dispatch('getDetailUserData')
             resolve(results)
           })
           .catch(error => {
@@ -83,6 +94,7 @@ export default new Vuex.Store({
         })
           .then(results => {
             resolve(results)
+            context.dispatch('getDetailUserData')
           })
           .catch(error => {
             reject(error)
@@ -91,9 +103,11 @@ export default new Vuex.Store({
     },
     async transfer(context, payload) {
       return new Promise((resolve, reject) => {
+        context.dispatch('interceptorRequest')
         axios.post(`${process.env.VUE_APP_SERVICE_API}/v1/transfers`, payload)
           .then(results => {
             resolve(results)
+            context.dispatch('getDetailUserData')
           })
           .catch(error => {
             reject(error)
@@ -102,8 +116,10 @@ export default new Vuex.Store({
     },
     async getDetailTransferById(context, payload) {
       return new Promise((resolve, reject) => {
+        context.dispatch('interceptorRequest')
         try {
           const result = axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/transfers/${payload}`)
+          context.dispatch('getDetailUserData')
           resolve(result)
         } catch (error) {
           reject(error)
@@ -112,30 +128,64 @@ export default new Vuex.Store({
     },
     async getDetailTransferByFirstName(context, payload) {
       return new Promise((resolve, reject) => {
+        context.dispatch('interceptorRequest')
         try {
           const result = axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/transfers/search?firstName=${payload.firstName}&type=transfers`)
+          context.dispatch('getDetailUserData')
           resolve(result)
         } catch (error) {
           reject(error)
         }
       })
     },
+    getHistory (context, payload) {
+      return new Promise((resolve, reject) => {
+        context.dispatch('interceptorRequest')
+        console.log('process.env.VUE_APP_SERVICE_API :>> ', process.env.VUE_APP_SERVICE_API)
+        axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/transfers/search?type=all&limit=${payload.limit}`)
+          .then(results => {
+            console.log('results history:>> ', results)
+            context.commit('SET_TRANSACTION_HISTORY', results.data.result)
+            context.dispatch('getDetailUserData')
+            resolve(results.data.result)
+          })
+          .catch(error => {
+            console.log('error ini:>> ', error)
+            reject(error)
+          })
+      })
+    },
     async getReceiver (context, payload) {
       return new Promise((resolve, reject) => {
+        context.dispatch('interceptorRequest')
         try {
           const dataReceiver = axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/users/${payload}`, {
             headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
           })
+          context.dispatch('getDetailUserData')
           resolve(dataReceiver)
         } catch (error) {
           reject(error)
         }
       })
     },
+    getDetailUserData ({ dispatch, commit, state }) {
+      return new Promise((resolve, reject) => {
+        axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/users/${state.userData.id}?type=all`)
+          .then((result) => {
+            commit('SET_USERDATA', result.data.result)
+            resolve(result.data.result[0])
+          }).catch((err) => {
+            reject(err)
+          })
+      })
+    },
     deletePhoneNumber(context, payload) {
       return new Promise((resolve, reject) => {
+        context.dispatch('interceptorRequest')
         try {
           const deleteResult = axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/${payload.idUser}`, payload.phoneNumber)
+          context.dispatch('getDetailUserData')
           resolve(deleteResult)
         } catch (error) {
           reject(error)
@@ -144,10 +194,12 @@ export default new Vuex.Store({
     },
     deleteTransactionTransferById (context, payload) {
       return new Promise((resolve, reject) => {
+        context.dispatch('interceptorRequest')
         axios.delete(`${process.env.VUE_APP_SERVICE_API}/v1/transfers/${payload}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
         })
           .then(results => {
+            context.dispatch('getDetailUserData')
             resolve(results)
           })
           .catch(error => {
@@ -157,7 +209,7 @@ export default new Vuex.Store({
     },
     interceptorRequest() {
       axios.interceptors.request.use(function (config) {
-        axios.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem('accessToken')}`
+        config.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`
         return config
       }, function (error) {
         return Promise.reject(error)
@@ -165,6 +217,7 @@ export default new Vuex.Store({
     },
     interceptorResponse(context) {
       axios.interceptors.response.use(function (response) {
+        console.log('response :>> ', response)
         const responseStatus = response.data.statusCode
         const responseMessage = response.data.result.message
         if (responseStatus === 200) {
@@ -180,6 +233,7 @@ export default new Vuex.Store({
         }
         return response
       }, function (error) {
+        console.log('error :>> ', error)
         const errorStatus = error.response.data.status
         const errorMessage = error.response.data.err.message
 
@@ -233,10 +287,10 @@ export default new Vuex.Store({
                 alert('server error')
               })
           } else if (errorMessage === 'Invalid Token') {
-            context.commit('REMOVE_USERDATA')
-            context.commit('REMOVE_ALLTOKEN')
-            context.commit('REMOVE_ALL_LOCAL_STORAGE')
-            context.commit('CLEAR_INTERVAL_SOCKET_IO')
+            // context.commit('REMOVE_USERDATA')
+            // context.commit('REMOVE_ALLTOKEN')
+            // context.commit('REMOVE_ALL_LOCAL_STORAGE')
+            // context.commit('CLEAR_INTERVAL_SOCKET_IO')
             router.push('/auth/login')
           } else if (errorMessage === 'Forbidden: Token cannot be empty') {
             context.commit('REMOVE_USERDATA')
@@ -268,6 +322,9 @@ export default new Vuex.Store({
     },
     isPinExist(state) {
       return state.userData.pin !== "not exists"
+    },
+    getTransactionHistory (state) {
+      return state.transactionHistory
     }
   },
   modules: {

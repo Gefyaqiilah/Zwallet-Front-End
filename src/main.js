@@ -4,16 +4,11 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import VueObserveVisibility from 'vue-observe-visibility'
-import VueSocketIO from 'vue-socket.io'
-import * as io from 'socket.io-client'
+import VueAWN from 'vue-awesome-notifications'
 
+Vue.use(VueAWN)
 Vue.use(VueObserveVisibility)
 Vue.config.productionTip = false
-
-Vue.use(new VueSocketIO({
-  debug: true,
-  connection: io(`${process.env.VUE_APP_SERVICE_API}`)
-}))
 
 Vue.directive('capitalizeText', {
   bind: function (el, binding) {

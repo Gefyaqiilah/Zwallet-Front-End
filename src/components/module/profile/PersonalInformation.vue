@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'PersonalInformation',
   props: ['token'],
@@ -57,7 +58,11 @@ export default {
       userData: this.token
     }
   },
-  mounted () {
+  methods: {
+    ...mapActions(['getDetailUserData'])
+  },
+  async mounted () {
+    this.getDetailUserData()
   }
 }
 </script>

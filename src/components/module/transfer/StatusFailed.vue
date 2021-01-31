@@ -60,8 +60,15 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
-  name: 'StatusFailed'
+  name: 'StatusFailed',
+  methods: {
+    ...mapActions(['getDetailUserData'])
+  },
+  async mounted () {
+    await this.getDetailUserData()
+  }
 }
 </script>
 

@@ -64,7 +64,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getReceiver']),
+    ...mapActions(['getReceiver', 'getDetailUserData']),
     async handleGetReceiver () {
       this.getReceiver(this.$route.params.idUser)
         .then(results => {
@@ -86,8 +86,9 @@ export default {
       }
     }
   },
-  mounted () {
+  async mounted () {
     this.handleGetReceiver()
+    await this.getDetailUserData()
   },
   computed: {
     balanceSender () {

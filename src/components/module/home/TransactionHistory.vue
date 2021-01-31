@@ -38,6 +38,7 @@ export default {
   props: ['firstName'],
   methods: {
     ...mapMutations(['REMOVE_USERDATA', 'REMOVE_ALLTOKEN', 'REMOVE_ALL_LOCAL_STORAGE']),
+    ...mapActions(['deleteTransactionTransferById', 'getHistory', 'getDetailUserData']),
     async fetchTransactionTransfers () {
       try {
         const resultsFetchTransfers = await axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/transfers/search?firstName=${this.firstName}&type=transfers&page=1&limit=4`, { headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` } })
@@ -63,7 +64,9 @@ export default {
         alert('failed to be deleted')
       }
     },
-    ...mapActions(['deleteTransactionTransferById']),
+    async handleGetHistory () {
+      await this.getHistory({ limit: 3 })
+    },
     handleDeleteTransactionTransferById (id) {
       if (!localStorage.getItem('accessToken')) {
         this.REMOVE_USERDATA()
@@ -95,8 +98,10 @@ export default {
       })
     }
   },
-  mounted () {
+  async mounted () {
     this.fetchTransactionTransfers()
+    this.handleGetHistory()
+    await this.getDetailUserData()
   }
 }
 </script>

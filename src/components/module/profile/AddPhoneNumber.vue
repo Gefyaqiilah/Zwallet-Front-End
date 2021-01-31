@@ -34,6 +34,7 @@
 import $ from 'jquery'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import { mapActions } from 'vuex'
 export default {
   name: 'AddPhoneNumber',
   props: ['token'],
@@ -44,6 +45,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['getDetailUserData']),
     detectInputInserted () {
       $(document).on('change', function () {
         const buttonSignUp = document.querySelector('.change-password-btn')
@@ -77,7 +79,8 @@ export default {
       }
     }
   },
-  mounted () {
+  async mounted () {
+    await this.getDetailUserData()
     this.detectInputInserted()
   }
 }

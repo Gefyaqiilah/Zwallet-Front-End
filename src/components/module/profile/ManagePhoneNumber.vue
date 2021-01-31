@@ -77,7 +77,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['deletePhoneNumber']),
+    ...mapActions(['deletePhoneNumber', 'getDetailUserData']),
     handleDeletePhoneNumber (type) {
       let data = null
       let check = ''
@@ -116,6 +116,9 @@ export default {
         }
       })
     }
+  },
+  async mounted () {
+    await this.getDetailUserData()
   },
   computed: {
     ...mapGetters(['getUserData']),

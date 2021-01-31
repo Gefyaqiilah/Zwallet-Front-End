@@ -70,8 +70,8 @@ export default {
     },
     ...mapMutations(['SET_FROM_IO']),
     handleSetFromIo (id) {
-      this.$socket.emit('getUserData', id)
-      this.sockets.subscribe('getUserData', data => {
+      this.socket.emit('getUserData', id)
+      this.socket.on('getUserData', data => {
         this.SET_FROM_IO(data[0])
       })
     }

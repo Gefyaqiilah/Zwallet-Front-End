@@ -61,7 +61,6 @@
       </div>
     </div>
     <div class="button-continue">
-      <button class="share"><img src="/img/share-icon.png" alt="" /></button>
       <button class="info-button" @click="backToHome">Back To Home</button>
       <button class="download-pdf" @click.prevent="print">Download PDF</button>
     </div>
@@ -90,7 +89,7 @@ export default {
     ...mapActions([
       'getDetailTransferById',
       'getDetailTransferByFirstName',
-      'getReceiver'
+      'getReceiver', 'getDetailUserData'
     ]),
     handleGetDetailTransferById () {
       this.getDetailTransferById(this.$route.query.idTransfer).then(results => {
@@ -159,9 +158,10 @@ export default {
       })
     }
   },
-  mounted () {
+  async mounted () {
     this.handleGetDetailTransferById()
     this.handleGetReceiver()
+    await this.getDetailUserData()
   },
   computed: {
     ...mapGetters(['getUserData']),

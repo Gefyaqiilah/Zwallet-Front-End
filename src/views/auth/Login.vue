@@ -40,7 +40,7 @@
               type="password"
               v-model="password"
               id="password"
-              class="form-control input-border-bottom shadow-none"
+              class="form-control shadow-none"
               placeholder="Enter your password"
               aria-label="Username"
               aria-describedby="basic-addon1"
@@ -170,23 +170,17 @@ export default {
   line-height: 23px;
   color: rgba(169, 169, 169, 0.8) !important;
 }
-
+.form-control {
+  border:none !important;
+}
 .input-group-text {
-  border-top: none !important;
-  border-right: none !important;
-  border-left: none !important;
-  border-bottom: 1.5px solid rgba(169, 169, 169, 0.6);
+  border:none !important;
   border-radius: 0 !important;
-  background-color: transparent !important;
 }
 
 .input-group-prepend {
-  border-top: none !important;
-  border-right: none !important;
-  border-left: none !important;
-  border-bottom: none !important;
+  border:none !important;
   border-radius: 0 !important;
-  background-color: transparent !important;
 }
 
 .col-md-9.email-position {
