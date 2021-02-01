@@ -4,76 +4,40 @@
           <p>Transaction History</p>
   </div>
   <div class="transaction-week">
-      <div class="title-week">
-          <p>This Week</p>
-      </div>
       <div class="week-history">
-          <div class="transaction-week-1">
+          <div class="transaction-week-1" v-for="(transaction, index) in getTransactionHistory.transactions" :key="index">
               <div class="thumbnail-photo">
                   <img src="/img/1.png" alt="">
               </div>
               <div class="detail-username">
-                  <p class="username">Samuel Suhi</p>
-                  <p>Transfer</p>
+                  <p class="username">{{transaction.userSender.id === getUserData.id ? 'You' : transaction.userSender.firstName}}</p>
+                  <p>{{ transaction.idSender === getUserData.id ? 'Transfer' : 'Receive' }}</p>
               </div>
-              <div class="amount green">
-                  <p>+Rp50.000</p>
-              </div>
-          </div>
-          <div class="transaction-week-2">
-              <div class="thumbnail-photo">
-                  <img src="/img/logo.png" alt="">
-              </div>
-              <div class="detail-username">
-                  <p class="username">Netflix</p>
-                  <p>Subscription</p>
-              </div>
-              <div class="amount red">
-                  <p>-Rp149.000</p>
+              <div class="amount" :class="transaction.idSender === getUserData.id ? 'red' : 'green'">
+                  <p>{{ transaction.idSender === getUserData.id ? '- Rp.' + transaction.amount : '+ Rp.' + transaction.amount}}</p>
               </div>
           </div>
       </div>
   </div>
-  <div class="transaction-month">
-    <div class="title-month">
-        <p>This Month</p>
-    </div>
-    <div class="month-history">
-        <div class="transaction-month-1">
-            <div class="thumbnail-photo">
-                <img src="/img/2.png" alt="">
-            </div>
-            <div class="detail-username">
-                <p class="username">Christine Mar..</p>
-                <p>Transfer</p>
-            </div>
-            <div class="amount green">
-                <p>+Rp50.000</p>
-            </div>
-        </div>
-        <div class="transaction-month-2">
-            <div class="thumbnail-photo">
-                <img src="/img/logo-adobe.png" alt="">
-            </div>
-            <div class="detail-username">
-                <p class="username">Adobe Inc.</p>
-                <p>Subscription</p>
-            </div>
-            <div class="amount red">
-                <p>-{{handleLastName}}</p>
-            </div>
-        </div>
-    </div>
-</div>
 </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'TransactionHistory',
+  methods: {
+    ...mapActions(['getHistory']),
+    async handleGetHistory () {
+      const result = await this.getHistory({ limit: 5 })
+      console.log('result history:>> ', result)
+    }
+  },
+  mounted () {
+    this.handleGetHistory()
+  },
   computed: {
-    ...mapGetters(['getUserData']),
+    ...mapGetters(['getUserData', 'getTransactionHistory']),
     handleLastName () {
       return this.getUserData.firstName
     }
@@ -84,6 +48,7 @@ export default {
 <style scoped>
 .transaction-history {
     display: grid;
+    min-height:500px;
     grid-template-columns: 1fr;
     grid-template-rows: 100px max-content max-content;
     grid-template-areas:
@@ -133,18 +98,18 @@ export default {
 }
 
 .week-history {
-    display: grid;
+    /* display: grid;
     grid-template-columns: 100%;
     grid-template-rows: max-content max-content;
     grid-template-areas:
         'transaction-week-1'
         'transaction-week-2';
-    gap: 50px 0;
+    gap: 50px 0; */
 }
 
 .week-history .transaction-week-1 {
     grid-area: transaction-week-1;
-
+    margin:0 0 20px 0;
     display: grid;
     grid-template-columns: 0.5fr 4fr 1fr;
     grid-template-areas: 'thumbnail-photo detail-username amount';

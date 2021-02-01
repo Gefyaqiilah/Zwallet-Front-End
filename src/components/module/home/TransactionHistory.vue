@@ -2,9 +2,9 @@
 <div v-if="renderComponent" class="transaction-history">
   <div class="container ">
   <div class="transaction-history-grid">
-      <div class="title">
+      <div class="title d-flex justify-content-between">
           <p>Transaction History</p>
-          <a href="#">See all</a>
+          <p @click="toTransactionHistory" class="cursor-pointer purple">See all</p>
       </div>
       <div class="history" v-if="getTransactionHistory.transactions.length > 0">
           <div v-for="(transaction, index) in getTransactionHistory.transactions" :key="index" class="transaction col-md-12">
@@ -97,6 +97,9 @@ export default {
             })
         }
       })
+    },
+    toTransactionHistory () {
+      this.$router.push('/home/transactionhistory')
     }
   },
   async mounted () {
@@ -220,5 +223,11 @@ export default {
   font-weight:bold;
   text-align:center;
   font-size:20px;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+.purple {
+  color: #6379F4 !important;
 }
 </style>
