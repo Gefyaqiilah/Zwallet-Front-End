@@ -9,7 +9,7 @@
                 <div class="user-photo">
                     <img class="photo cursor-pointer" @click="toProfile" :src="getUserData.photo === null? '/img/user-avatar.png' :getUserData.photo" alt="">
                 </div>
-                <h1 class="cursor-pointer" @click="toPersonalInformation" v-capitalizeText="true">{{getUserData.firstName +' '}} {{getUserData.lastName !== null? getUserData.lastName : ''}}</h1>
+                <h1 class="cursor-pointer" @click="toPersonalInformation" v-capitalizeText="true">{{getUserData.firstName +' '}}</h1>
                 <p class="cursor-pointer" @click="toPersonalInformation">{{getUserData.phoneNumber ? getUserData.phoneNumber : 'phone number has not been added'}}</p>
                 <div class="notification cursor-pointer">
                     <img src="/img/bell.png" class="notification" alt="">

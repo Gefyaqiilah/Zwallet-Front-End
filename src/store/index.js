@@ -172,7 +172,7 @@ export default new Vuex.Store({
     getHistory (context, payload) {
       return new Promise((resolve, reject) => {
         context.dispatch('interceptorRequest')
-        axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/transfers/search?type=all&limit=${payload.limit}`)
+        axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/transfers/search?type=all&limit=${payload.limit}&page=${payload.page || 1}`)
           .then(results => {
             console.log('results history:>> ', results)
             const chartData = results.data.result.transactions.map(el => {
@@ -243,6 +243,17 @@ export default new Vuex.Store({
           })
           .catch(error => {
             reject(error)
+          })
+      })
+    },
+    updateProfile (context, payload) {
+      return new Promise((resolve, reject) => {
+        axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/${context.state.userData.id}`, payload)
+          .then((result) => {
+            context.dispatch('getDetailUserData')
+            resolve(result.data.result)
+          }).catch((err) => {
+            reject(err)
           })
       })
     },

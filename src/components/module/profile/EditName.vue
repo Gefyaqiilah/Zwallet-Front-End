@@ -1,9 +1,9 @@
 <template>
   <div class="change-password">
     <div class="change-password-title">
-      <p class="title">Edit Phone Number</p>
+      <p class="title">Edit {{this.$route.query.edit}}</p>
       <p class="title-desc">
-          Add at least one phone number for the transfer ID so you can start transfering your money to another user.            </p>
+          You can change {{this.$route.query.edit}} by fill and submit this bottom field. </p>
     </div>
     <div class="form-change-password">
       <form action="" class="form ">
@@ -13,16 +13,13 @@
                       <div class="input-group-prepend">
                           <span class="input-group-text" id="basic-addon1"><img src="/img/telephone.png" alt=""></span>
                       </div>
-                      <div class="input-group-prepend">
-                          <span class="input-group-text" id="basic-addon1">+62</span>
-                      </div>
-                      <input type="number" v-model="inputPhoneNumber" id="phoneNumber" class="form-control input-border-bottom shadow-none" placeholder="Enter your phone number" value="awdaw" aria-label="Username" aria-describedby="basic-addon1">
+                      <input type="text" v-model="input" id="phoneNumber" :maxlength="this.$route.query.edit === 'lastName' ? '25' : '13'" class="form-control input-border-bottom shadow-none" :placeholder="'Enter your' + this.$route.query.edit" aria-label="Username" aria-describedby="basic-addon1">
                   </div>
               </div>
           </div>
           <div class="row mt-5 justify-content-center">
               <div class="col-md-7 btn-login-position">
-                  <button class="change-password-btn" v-on:click.prevent="editPhoneNumber">Add Phone Number</button>
+                  <button class="change-password-btn" v-on:click.prevent="handleEditProfile">Edit {{this.$route.query.edit}}</button>
               </div>
           </div>
       </form>
@@ -31,56 +28,41 @@
 </template>
 
 <script>
-import $ from 'jquery'
-import axios from 'axios'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import Swal from 'sweetalert2'
 export default {
-  name: 'EditPhoneNumber',
-  props: ['token'],
   data () {
     return {
-      userData: this.token,
-      inputPhoneNumber: this.$route.query.type === 'primary' ? this.token.phoneNumber : this.token.phoneNumberSecond
+      input: ''
     }
   },
   methods: {
-    ...mapActions(['getDetailUserData']),
-    detectInputInserted () {
-      $(document).on('change', function () {
-        const buttonSignUp = document.querySelector('.change-password-btn')
-        if ($('#phoneNumber').val() !== '') {
-          buttonSignUp.style.background = '#6379F4'
-          buttonSignUp.style.color = 'white'
-        } else {
-          buttonSignUp.style.background = '#DADADA'
-          buttonSignUp.style.color = '#88888F'
-        }
-      })
-    },
-    async editPhoneNumber () {
-      const id = this.userData.id
-      const dataUpdate = {}
-      if (this.$route.query.type === 'primary') {
-        dataUpdate.phoneNumber = this.inputPhoneNumber
-      } else {
-        dataUpdate.phoneNumberSecond = this.inputPhoneNumber
+    ...mapActions(['updateProfile']),
+    async handleEditProfile () {
+      const editSelected = this.$route.query.edit
+      const payload = {
+        [editSelected]: this.input
       }
+      console.log('payload :>> ', payload)
       try {
-        await axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/${id}`, dataUpdate)
-        alert('Phone number has been updated')
-        this.$router.go(-2)
+        this.updateProfile(payload)
+        Swal.fire('Profile has been updated', 'Your ' + this.$route.query.edit + ' has been updated', 'success')
+        this.$router.go(-1)
       } catch (error) {
+        console.log('error :>> ', error)
       }
     }
   },
-  async mounted () {
-    this.detectInputInserted()
-    await this.getDetailUserData()
+  mounted () {
+    this.input = this.getUserData[this.$route.query.edit]
+  },
+  computed: {
+    ...mapGetters(['getUserData'])
   }
 }
 </script>
 
-<style scoped>
+<style  scoped>
 
 .change-password {
     background: #FFFFFF;
@@ -180,11 +162,11 @@ export default {
 }
 
 .form-control {
-    border-top: none !important;
-    border-right: none !important;
-    border-left: none !important;
-    border-bottom: 1.5px solid rgba(169, 169, 169, 0.6) !important;
-    border-radius: 0 !important;
+    border: 1px solid rgba(169, 169, 169, 0.8);
+    height: 65px;
+    overflow: hidden !important;
+    border-radius: 10px !important;
+
 }
 
 ::placeholder {
@@ -216,7 +198,7 @@ export default {
 }
 
 .col-md-9.email-position {
-    margin: 50px auto 0 0;
+    margin: 50px auto 0 auto;
 }
 
 .col-md-9.pass-position {
@@ -279,5 +261,13 @@ export default {
 
 .col-md-9.signup-position p .signup {
     color: #6379F4;
+}
+.input-group-prepend {
+  background-color:none;
+  border:none !important;
+}
+.input-group-text {
+  background-color:none;
+  border:none !important;
 }
 </style>

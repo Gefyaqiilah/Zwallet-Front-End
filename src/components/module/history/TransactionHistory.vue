@@ -19,6 +19,15 @@
           </div>
       </div>
   </div>
+  <div>
+              <nav class="pagination-nav" aria-label="Page navigation example">
+        <ul class="pagination pagination-md justify-content-center">
+            <li class="page-item"><a class="page-link" href="#" @click.prevent="getHistory({ limit: 5, page: parseInt(getTransactionHistory.pagination.currentPage ) - 1})">Previous</a></li>
+            <li v-for="noPage in getTransactionHistory.pagination.totalPage" :key="noPage" :class="[getTransactionHistory.pagination.currentPage == noPage ? 'active' : '']" class="page-item"><a class="page-link" href="#" @click.prevent="getHistory({ limit: 5, page: noPage})">{{noPage}}</a></li>
+            <li class="page-item" :class="[getTransactionHistory.pagination.currentPage == getTransactionHistory.pagination.totalPage ? 'disabled' : '']"><a class="page-link" href="#" @click.prevent="getHistory({ limit: 5, page: parseInt(getTransactionHistory.pagination.currentPage ) + 1})">Next</a></li>
+        </ul>
+    </nav>
+  </div>
 </div>
 </template>
 
@@ -270,5 +279,8 @@ export default {
     font-size: 16px;
     line-height: 22px;
     text-align: right;
+}
+.pagination ul li {
+    font-size: 13px !important;
 }
 </style>

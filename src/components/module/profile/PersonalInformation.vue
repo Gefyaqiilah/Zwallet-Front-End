@@ -6,29 +6,35 @@
           We got your personal information from the sign up proccess. If you want to make changes on your information, contact our support.
       </p>
     </div>
-    <div class="how-to">
-      <div class="first-name">
+    <div class="how-to ">
+      <div class="first-name d-flex justify-content-between p-2 align-items-center">
           <div class="first-name-title title gap">
               <p>First Name</p>
-          </div>
           <div class="bold gap">
-          <p class="capitalize">{{userData.firstName}}</p>
+          <p class="capitalize">{{getUserData.firstName}}</p>
+          </div>
+          </div>
+          <div class="side-right">
+              <p class="cursor-pointer" @click="toEditProfile('firstName')">Manage</p>
           </div>
       </div>
-      <div class="last-name">
+      <div class="last-name d-flex justify-content-between p-2 align-items-center">
           <div class="last-name-title title gap">
               <p>Last Name</p>
-          </div>
           <div class="bold gap">
-              <p class="capitalize">{{userData.lastName!==null?userData.lastName:'-'}}</p>
+              <p class="capitalize">{{getUserData.lastName!==null?getUserData.lastName:'-'}}</p>
+          </div>
+          </div>
+                  <div class="side-right">
+              <p class="cursor-pointer" @click="toEditProfile('lastName')">Manage</p>
           </div>
       </div>
-      <div class="verified-email">
+      <div class="verified-email d-flex justify-content-between p-2 align-items-center">
           <div class="verified-email-title title gap">
               <p>Verified E-mail</p>
-          </div>
           <div class="bold gap">
-              <p>{{userData.email}}</p>
+              <p class="p-0 m-0">{{getUserData.email}}</p>
+          </div>
           </div>
       </div>
       <div class="phone-number">
@@ -37,7 +43,7 @@
                   <p>Phone Number</p>
               </div>
               <div class="bold gap">
-                  <p>{{userData.phoneNumber!==null?userData.phoneNumber:'-'}}</p>
+                  <p>{{getUserData.phoneNumber!==null?getUserData.phoneNumber:'-'}}</p>
               </div>
           </div>
           <div class="side-right">
@@ -49,7 +55,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'PersonalInformation',
   props: ['token'],
@@ -59,7 +65,13 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getDetailUserData'])
+    ...mapActions(['getDetailUserData']),
+    toEditProfile (type) {
+      this.$router.push({ path: '/home/editName', query: { edit: type } })
+    }
+  },
+  computed: {
+    ...mapGetters(['getUserData'])
   },
   async mounted () {
     this.getDetailUserData()
@@ -273,6 +285,9 @@ export default {
     font-size: 22px;
     line-height: 30px;
     color: #514F5B;
+}
+.cursor-pointer {
+    cursor: pointer;
 }
 @media screen and (max-width:400px){
   .bold p{

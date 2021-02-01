@@ -23,6 +23,8 @@ import EditPhoneNumber from '@/components/module/profile/EditPhoneNumber'
 import ManagePhoneNumber from '@/components/module/profile/ManagePhoneNumber'
 import EmailVerification from '@/views/email/EmailVerification'
 import store from '@/store/index'
+import EditName from '@/components/module/profile/EditName'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -75,6 +77,11 @@ const routes = [
         path: 'transactionhistory',
         name: 'TransactionHistory',
         component: TransactionHistory
+      },
+      {
+        path: 'editname',
+        name: 'EditName',
+        component: EditName
       },
       {
         path: 'topup',

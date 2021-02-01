@@ -25,8 +25,8 @@
           >
       </div>
       <div class="profile-name">
-        <h1 v-capitalizeText="true">{{this.token.firstName}}</h1>
-        <p>{{this.token.phoneNumber}}</p>
+        <h1 v-capitalizeText="true">{{getUserData.firstName}}</h1>
+        <p>{{getUserData.phoneNumber}}</p>
       </div>
     </div>
     <div class="profile-menu">
