@@ -32,7 +32,7 @@ press continue to the next steps.
           </div>
     </div>
       <p style="color:black;text-align:center;font-weight:700;">
-        {{getUserData.balance == 0 ? `Oops! your balance is not enough`:`Rp.${getUserData.balance} available` }}
+        {{getUserData.balance == 0 ? `Oops! your balance is not enough`:`Rp.${new Number(getUserData.balance).toLocaleString('id-ID')} available` }}
         </p>
           <div class="form-group form-position">
             <div class="input-group input-group-position">

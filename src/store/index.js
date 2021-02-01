@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken'
 import router from '../router'
 import createPersistedState from "vuex-persistedstate"
 import Swal from 'sweetalert2'
+import moment from 'moment'
 
 Vue.use(Vuex)
 
@@ -18,7 +19,8 @@ export default new Vuex.Store({
     intervalSocketIo: null,
     transactionHistory: {
       paginations: null,
-      transactions: []
+      transactions: [],
+      chartData: []
     }
   },
   plugins: [createPersistedState()],
@@ -38,6 +40,9 @@ export default new Vuex.Store({
     SET_TRANSACTION_HISTORY (state, payload) {
       state.transactionHistory.pagination = payload.pagination
       state.transactionHistory.transactions = payload.transactions
+    },
+    SET_CHART_HISTORY (state, payload) {
+      state.transactionHistory.chartData = payload
     },
     REMOVE_ALL_LOCAL_STORAGE() {
       localStorage.removeItem('vuex')
@@ -60,7 +65,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         context.dispatch('interceptorRequest')
         axios.post(`${process.env.VUE_APP_SERVICE_API}/v1/users/login`, payload)
-          .then(results => {
+          .then(async (results) => {
             const result = results.data.result
             console.log('result :>> ', result)
             const decoded = jwt.verify(result.accessToken, process.env.VUE_APP_JWT_KEY, result.refreshToken)
@@ -72,7 +77,7 @@ export default new Vuex.Store({
             }
             localStorage.setItem('dataUser', JSON.stringify(payload))
             context.commit('SET_USERDATA', payload)
-            context.dispatch('getDetailUserData')
+            await context.dispatch('getDetailUserData')
             resolve(results)
           })
           .catch(error => {
@@ -92,9 +97,9 @@ export default new Vuex.Store({
         axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/${payload.id}`, pin, {
           headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
         })
-          .then(results => {
+          .then(async (results) => {
+            await context.dispatch('getDetailUserData')
             resolve(results)
-            context.dispatch('getDetailUserData')
           })
           .catch(error => {
             reject(error)
@@ -108,6 +113,20 @@ export default new Vuex.Store({
           .then(results => {
             resolve(results)
             context.dispatch('getDetailUserData')
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
+    async getStatusPin(context, payload) {
+      return new Promise((resolve, reject) => {
+        context.dispatch('interceptorRequest')
+        axios.post(`${process.env.VUE_APP_SERVICE_API}/v1/users/check-pin?option=checkexistpin`)
+          .then(results => {
+            console.log('results.data.result :>> ', results.data.result)
+            context.commit('SET_USERDATA', { ...context.state.userData, pin: results.data.result })
+            resolve(results.data.result)
           })
           .catch(error => {
             reject(error)
@@ -141,10 +160,17 @@ export default new Vuex.Store({
     getHistory (context, payload) {
       return new Promise((resolve, reject) => {
         context.dispatch('interceptorRequest')
-        console.log('process.env.VUE_APP_SERVICE_API :>> ', process.env.VUE_APP_SERVICE_API)
         axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/transfers/search?type=all&limit=${payload.limit}`)
           .then(results => {
             console.log('results history:>> ', results)
+            const chartData = results.data.result.transactions.map(el => {
+              return [
+                moment(el.transferDate).format('L'),
+                el.amount
+              ]
+            }).slice(0, 3)
+            context.commit('SET_CHART_HISTORY', chartData)
+            console.log('chartData :>> ', chartData)
             context.commit('SET_TRANSACTION_HISTORY', results.data.result)
             context.dispatch('getDetailUserData')
             resolve(results.data.result)
@@ -172,8 +198,9 @@ export default new Vuex.Store({
     getDetailUserData ({ dispatch, commit, state }) {
       return new Promise((resolve, reject) => {
         axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/users/${state.userData.id}?type=all`)
-          .then((result) => {
+          .then(async (result) => {
             commit('SET_USERDATA', result.data.result)
+            await dispatch('getStatusPin')
             resolve(result.data.result[0])
           }).catch((err) => {
             reject(err)
@@ -321,7 +348,7 @@ export default new Vuex.Store({
       return state.accessToken !== null && state.refreshToken !== null
     },
     isPinExist(state) {
-      return state.userData.pin !== "not exists"
+      return state.userData.pin !== "not exist"
     },
     getTransactionHistory (state) {
       return state.transactionHistory

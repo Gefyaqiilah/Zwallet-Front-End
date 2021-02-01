@@ -6,17 +6,20 @@
           <p>Transaction History</p>
           <a href="#">See all</a>
       </div>
-      <div class="history">
-          <div v-for="transferTransaction in dataTransfer" :key="transferTransaction.idTransfer" class="transaction col-md-12">
+      <div class="history" v-if="getTransactionHistory.transactions.length > 0">
+          <div v-for="(transaction, index) in getTransactionHistory.transactions" :key="index" class="transaction col-md-12">
               <div class="detail-photo">
-              <img class="transaction-photo" :src="transferTransaction.photo === null? '/img/user-avatar.png' :transferTransaction.photo" alt="">
+              <img class="transaction-photo" :src="transaction.userSender.photo === null? '/img/user-avatar.png' :transaction.userSender.photo" alt="">
               </div>
               <div class="detail-name">
-                  <p class="name">{{transferTransaction.Receiver}}</p>
-                  <p class="status">Transfer to {{transferTransaction.Receiver}}</p>
+                  <p class="name">{{transaction.userSender.firstName}}</p>
+                  <p class="status">{{getUserData.id === transaction.idSender ? 'Transfer' : 'Receive'}}</p>
               </div>
-              <p class="amount red">- Rp.{{transferTransaction.amount}} <img src="/img/trash.png" v-on:click.prevent="handleDeleteTransactionTransferById(transferTransaction.idTransfer,$event)" :value="transferTransaction.idTransfer" :alt="transferTransaction.idTransfer"></p>
+              <p :class="getUserData.id === transaction.idSender ? 'red' : 'green'" class="amount">{{getUserData.id === transaction.idSender ? '-' : '+'}} Rp.{{transaction.amount}} <img src="/img/trash.png" v-on:click.prevent="handleDeleteTransactionTransferById(transaction.idTransfer,$event)" :value="transaction.idTransfer" :alt="transaction.idTransfer"></p>
           </div>
+      </div>
+      <div class="d-flex wrapper-sorry justify-content-center align-items-center" v-if="getTransactionHistory.transactions.length === 0">
+        <p class="text-sorry">You don't have any transaction data</p>
       </div>
   </div>
 </div>
@@ -25,7 +28,7 @@
 
 <script>
 import axios from 'axios'
-import { mapMutations, mapActions } from 'vuex'
+import { mapMutations, mapActions, mapGetters } from 'vuex'
 import Swal from 'sweetalert2'
 export default {
   name: 'TransactionHistory',
@@ -42,6 +45,7 @@ export default {
     async fetchTransactionTransfers () {
       try {
         const resultsFetchTransfers = await axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/transfers/search?firstName=${this.firstName}&type=transfers&page=1&limit=4`, { headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` } })
+        console.log('resultsFetchTransfers :>> ', resultsFetchTransfers)
         this.dataTransfer.push(...resultsFetchTransfers.data.result)
       } catch (error) {
       }
@@ -58,8 +62,6 @@ export default {
           headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
         })
         alert('deleted successfully')
-        const filter = this.dataTransfer.filter((data) => data.idTransfer !== cek)
-        this.dataTransfer = filter
       } catch (error) {
         alert('failed to be deleted')
       }
@@ -85,9 +87,8 @@ export default {
       }).then((result) => {
         if (result.isConfirmed) {
           this.deleteTransactionTransferById(id)
-            .then(() => {
-              const filter = this.dataTransfer.filter((data) => data.idTransfer !== id)
-              this.dataTransfer = filter
+            .then(async () => {
+              await this.getHistory({ limit: 3 })
               Swal.fire(
                 'Deleted!',
                 'Your transfer transaction has been deleted.',
@@ -100,8 +101,12 @@ export default {
   },
   async mounted () {
     this.fetchTransactionTransfers()
-    this.handleGetHistory()
+    await this.getHistory({ limit: 3 })
     await this.getDetailUserData()
+    console.log('this.getTransactionHistory :>> ', this.getTransactionHistory)
+  },
+  computed: {
+    ...mapGetters(['getTransactionHistory', 'getUserData'])
   }
 }
 </script>
@@ -209,5 +214,10 @@ export default {
 
 .transaction p.amount.red {
     color: #FF5B37;
+}
+
+.text-sorry {
+  font-weight:bold;
+  font-size:19px;
 }
 </style>

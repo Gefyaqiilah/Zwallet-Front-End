@@ -3,26 +3,52 @@
   <div class="income-expense">
       <div class="income">
           <img src="/img/arrow-down-green.png" alt="">
-          <p class="income-text">Income</p>
-          <p class="amount">Rp2.120.000</p>
+          <p class="income-text font-weight-bold">Income</p>
+          <p class="amount green font-weight-bold">Rp.{{income(getTransactionHistory.transactions)}}</p>
       </div>
       <div class="expense">
           <img src="/img/arrow-up-red.png" alt="">
-          <p class="income-text">Expense</p>
-          <p class="amount">Rp2.120.000</p>
+          <p class="income-text font-weight-bold">Expense</p>
+          <p class="amount red font-weight-bold">Rp.{{expense(getTransactionHistory.transactions)}}</p>
       </div>
   </div>
   <div class="graphic">
-    <div class="thumbnail-photo">
-          <img class="photo" src="/img/graphic.png" alt="">
-    </div>
+      <column-chart :download="true" :data="[...getTransactionHistory.chartData]"></column-chart>
   </div>
 </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
-  name: 'BalanceGraphic'
+  name: 'BalanceGraphic',
+  methods: {
+    income (transactions) {
+      const reducer = transactions.reduce((accumu, currValue) => {
+        if (currValue.idReceiver === this.getUserData.id) {
+          return accumu + parseInt(currValue.amount)
+        } else {
+          return accumu + 0
+        }
+      }, 0)
+      console.log('reducer :>> ', reducer)
+      return reducer
+    },
+    expense (transactions) {
+      const reducer = transactions.reduce((accumu, currValue) => {
+        if (currValue.idSender === this.getUserData.id) {
+          return accumu + parseInt(currValue.amount)
+        } else {
+          return accumu + 0
+        }
+      }, 0)
+      console.log('reducer :>> ', reducer)
+      return reducer
+    }
+  },
+  computed: {
+    ...mapGetters(['getTransactionHistory', 'getUserData'])
+  }
 }
 </script>
 
@@ -70,6 +96,13 @@ export default {
   width:100%;
   height:100%;
   object-fit: contain;
+}
+.green {
+    color: #1EC15F;
+}
+
+.red {
+    color: #FF5B37;
 }
 @media screen and (max-width:400px){
 .balance-graphic .graphic img {

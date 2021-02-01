@@ -9,7 +9,7 @@
         <div class="input-group-prepend">
             <span class="input-group-text" id="basic-addon1"><img src="/img/search.png" alt=""></span>
           </div>
-          <input type="text" v-model="search" @keyup.enter="searchReceiver" class="form-control search-input-text shadow-none" placeholder="Search firstname receiver in here and PRESS ENTER" aria-label="Username" aria-describedby="basic-addon1">
+          <input type="text" @keyup.enter="searchReceiver"  v-model="search" class="form-control search-input-text shadow-none" placeholder="Search firstname receiver in here and PRESS ENTER" aria-label="Username" aria-describedby="basic-addon1">
           </div>
       </div>
   <div v-if="!search" class="list-receiver">
@@ -41,6 +41,7 @@
 
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 export default {
   name: 'SearchReceiver',
   props: ['token'],
@@ -56,12 +57,15 @@ export default {
   methods: {
     async fetchReceiver () {
       const fetchReceiver = await axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/users?page=${this.page}`)
-      this.userReceiver.push(...fetchReceiver.data.result.users)
+      console.log('fetchReceiver.data.result.users :>> ', fetchReceiver.data.result.users)
+      const filter = fetchReceiver.data.result.users.filter(el => el.id !== this.getUserData.id)
+      this.userReceiver.push(...filter)
     },
     async searchReceiver () {
       try {
         const searchReceiver = await axios.get(`${process.env.VUE_APP_SERVICE_API}/v1/users/search?firstName=${this.search}`)
-        this.searchUser = searchReceiver.data.result
+        const filter = searchReceiver.data.result.filter(el => el.id !== this.getUserData.id)
+        this.searchUser = filter
       } catch (error) {
       }
     },
@@ -93,6 +97,7 @@ export default {
     this.fetchReceiver()
   },
   computed: {
+    ...mapGetters(['getUserData'])
   }
 }
 </script>

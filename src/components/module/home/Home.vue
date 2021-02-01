@@ -33,6 +33,7 @@ export default {
     "BalanceDetail BalanceDetail"
     "BalanceGraphic TransactionHistory"
   ;
+  grid-template-columns: 1fr 1fr;
   gap: 20px 20px;
 }
 .balance-detail{

@@ -1,5 +1,6 @@
 <template>
-  <div class="change-password">
+    <div>
+        <div class="change-password" v-if="pin === 'not exist'">
     <div class="change-password-title">
       <p class="title">Change PIN</p>
       <p class="title-desc">
@@ -26,12 +27,65 @@
           </div>
       </form>
     </div>
-  </div>
+        </div>
+        <div class="change-password" v-if="pin === 'exist'">
+    <div class="change-password-title">
+      <p class="title">Change PIN</p>
+      <p class="title-desc">
+          Enter your current 6 digits Zwallet PIN below to continue to the next steps.            </p>
+    </div>
+    <div class="form-change-password">
+      <form action="" class="form">
+          <div class="form-group row justify-content-center">
+              <div class="col-md-7 email-position">
+                  <div class="input-group pin">
+                      <input type="text" maxlength="1" class="form-control pin-1" name="" id="" required>
+                      <input type="text" maxlength="1" class="form-control pin-2 ml-3" name="" id="" required>
+                      <input type="text" maxlength="1" class="form-control pin-3 ml-3" name="" id="" required>
+                      <input type="text" maxlength="1" class="form-control pin-4 ml-3" name="" id="" required>
+                      <input type="text" maxlength="1" class="form-control pin-5 ml-3" name="" id="" required>
+                      <input type="text" maxlength="1" class="form-control pin-6 ml-3" name="" id="" required>
+                    </div>
+              </div>
+          </div>
+          <div class="row mt-5 justify-content-center">
+              <div class="col-md-7 btn-login-position">
+                  <button class="change-password-btn">Continue</button>
+              </div>
+          </div>
+      </form>
+    </div>
+        </div>
+    </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
-
+  data () {
+    return {
+      inputCheckPin: {
+        one: '',
+        two: '',
+        three: '',
+        four: '',
+        five: '',
+        six: ''
+      },
+      inputUpdatePin: {
+        one: '',
+        two: '',
+        three: '',
+        four: '',
+        five: '',
+        six: ''
+      },
+      statusPin: ''
+    }
+  },
+  methods: {
+    ...mapActions(['getStatusPin'])
+  }
 }
 </script>
 

@@ -28,7 +28,7 @@
 
 <script>
 import $ from 'jquery'
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 export default {
   name: 'CreatePin',
   data () {
@@ -63,17 +63,9 @@ export default {
       }
       this.createPin(payload)
         .then(async () => {
-          await this.handleSetFromIo(payload.id)
           alert('successfully added your pin')
           this.$router.push('/home')
         })
-    },
-    ...mapMutations(['SET_FROM_IO']),
-    handleSetFromIo (id) {
-      this.socket.emit('getUserData', id)
-      this.socket.on('getUserData', data => {
-        this.SET_FROM_IO(data[0])
-      })
     }
   },
   mounted () {

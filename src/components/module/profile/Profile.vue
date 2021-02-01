@@ -42,7 +42,7 @@
           <img src="/img/arrow-left.png" alt="" />
         </div>
       </div>
-      <div class="change-password list-menu">
+      <div class="change-password list-menu cursor">
         <div class="list-menu-left">
           <p>Change Password</p>
         </div>
@@ -50,7 +50,7 @@
           <img src="/img/arrow-left.png" alt="" />
         </div>
       </div>
-      <div class="change-pin list-menu">
+      <div class="change-pin list-menu cursor" @click="toChangePin">
         <div class="list-menu-left">
           <p>Change PIN</p>
         </div>
@@ -58,7 +58,7 @@
           <img src="/img/arrow-left.png" alt="" />
         </div>
       </div>
-      <div class="logout list-menu" @click="handleLogOut">
+      <div class="logout list-menu cursor" @click="handleLogOut">
         <div class="list-menu-left">
           <p>Logout</p>
         </div>
@@ -140,6 +140,9 @@ export default {
         showConfirmButton: false,
         timer: 3000
       })
+    },
+    toChangePin () {
+      this.$router.push('/home/changepin')
     }
   },
   async mounted () {
@@ -250,6 +253,9 @@ export default {
 }
 .logout {
      cursor: pointer;
+}
+.cursor{
+  cursor: pointer;
 }
 @media screen and (max-width: 992px) {
   .detail-profile {
