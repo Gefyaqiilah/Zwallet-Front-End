@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="change-password" v-if="pin === 'not exist'">
+        <div class="change-password" v-if="statusPin === 'incorrect'">
     <div class="change-password-title">
       <p class="title">Change PIN</p>
       <p class="title-desc">
@@ -11,46 +11,46 @@
           <div class="form-group row justify-content-center">
               <div class="col-md-7 email-position">
                   <div class="input-group pin">
-                      <input type="text" maxlength="1" class="form-control pin-1" name="" id="" required>
-                      <input type="text" maxlength="1" class="form-control pin-2 ml-3" name="" id="" required>
-                      <input type="text" maxlength="1" class="form-control pin-3 ml-3" name="" id="" required>
-                      <input type="text" maxlength="1" class="form-control pin-4 ml-3" name="" id="" required>
-                      <input type="text" maxlength="1" class="form-control pin-5 ml-3" name="" id="" required>
-                      <input type="text" maxlength="1" class="form-control pin-6 ml-3" name="" id="" required>
+                      <input type="password" maxlength="1" v-model="inputCheckPin.one" class="form-control pin-1" name="" id="" required>
+                      <input type="password" maxlength="1" v-model="inputCheckPin.two" class="form-control pin-2 ml-3" name="" id="" required>
+                      <input type="password" maxlength="1" v-model="inputCheckPin.three" class="form-control pin-3 ml-3" name="" id="" required>
+                      <input type="password" maxlength="1" v-model="inputCheckPin.four" class="form-control pin-4 ml-3" name="" id="" required>
+                      <input type="password" maxlength="1" v-model="inputCheckPin.five" class="form-control pin-5 ml-3" name="" id="" required>
+                      <input type="password" maxlength="1" v-model="inputCheckPin.six" class="form-control pin-6 ml-3" name="" id="" required>
                     </div>
               </div>
           </div>
           <div class="row mt-5 justify-content-center">
               <div class="col-md-7 btn-login-position">
-                  <button class="change-password-btn">Continue</button>
+                  <button class="change-password-btn" @click.prevent="handleCheckPin">Continue</button>
               </div>
           </div>
       </form>
     </div>
         </div>
-        <div class="change-password" v-if="pin === 'exist'">
+        <div class="change-password" v-if="statusPin === 'correct'">
     <div class="change-password-title">
       <p class="title">Change PIN</p>
       <p class="title-desc">
-          Enter your current 6 digits Zwallet PIN below to continue to the next steps.            </p>
+          Enter your new 6 digits Zwallet PIN below to change your PIN.            </p>
     </div>
     <div class="form-change-password">
       <form action="" class="form">
           <div class="form-group row justify-content-center">
               <div class="col-md-7 email-position">
                   <div class="input-group pin">
-                      <input type="text" maxlength="1" class="form-control pin-1" name="" id="" required>
-                      <input type="text" maxlength="1" class="form-control pin-2 ml-3" name="" id="" required>
-                      <input type="text" maxlength="1" class="form-control pin-3 ml-3" name="" id="" required>
-                      <input type="text" maxlength="1" class="form-control pin-4 ml-3" name="" id="" required>
-                      <input type="text" maxlength="1" class="form-control pin-5 ml-3" name="" id="" required>
-                      <input type="text" maxlength="1" class="form-control pin-6 ml-3" name="" id="" required>
+                      <input type="text" maxlength="1" v-model="inputUpdatePin.one" class="form-control pin-1" name="" id="" required>
+                      <input type="text" maxlength="1" v-model="inputUpdatePin.two" class="form-control pin-2 ml-3" name="" id="" required>
+                      <input type="text" maxlength="1" v-model="inputUpdatePin.three" class="form-control pin-3 ml-3" name="" id="" required>
+                      <input type="text" maxlength="1" v-model="inputUpdatePin.four" class="form-control pin-4 ml-3" name="" id="" required>
+                      <input type="text" maxlength="1" v-model="inputUpdatePin.five" class="form-control pin-5 ml-3" name="" id="" required>
+                      <input type="text" maxlength="1" v-model="inputUpdatePin.six" class="form-control pin-6 ml-3" name="" id="" required>
                     </div>
               </div>
           </div>
           <div class="row mt-5 justify-content-center">
               <div class="col-md-7 btn-login-position">
-                  <button class="change-password-btn">Continue</button>
+                  <button class="change-password-btn" @click.prevent="updatePin">Continue</button>
               </div>
           </div>
       </form>
@@ -60,8 +60,10 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import Swal from 'sweetalert2'
 export default {
+  name: 'ChangePin',
   data () {
     return {
       inputCheckPin: {
@@ -80,11 +82,63 @@ export default {
         five: '',
         six: ''
       },
-      statusPin: ''
+      statusPin: 'incorrect'
     }
   },
   methods: {
-    ...mapActions(['getStatusPin'])
+    ...mapActions(['getStatusPin', 'checkPin', 'createPin']),
+    async handleCheckPin () {
+      const payload = {
+        pin: '' + this.inputCheckPin.one + this.inputCheckPin.two + this.inputCheckPin.three + this.inputCheckPin.four + this.inputCheckPin.five + this.inputCheckPin.six
+      }
+      try {
+        const result = await this.checkPin(payload)
+        this.statusPin = result
+      } catch (error) {
+        if (error.response.data.err.message) {
+          Swal.fire('PIN Incorrect', 'Your PIN is not match', 'error')
+          this.clearInput()
+        }
+        console.log('error :>> ', error.response.data.err.message)
+      }
+    },
+    async updatePin () {
+      const payload = {
+        id: this.getUserData.id,
+        pin: '' + this.inputUpdatePin.one + this.inputUpdatePin.two + this.inputUpdatePin.three + this.inputUpdatePin.four + this.inputUpdatePin.five + this.inputUpdatePin.six
+      }
+      console.log('payload :>> ', payload)
+      try {
+        await this.createPin(payload)
+        Swal.fire('PIN updated successfully', 'Your PIN has been updated', 'success')
+        this.clearInput()
+        this.$router.push('/home')
+      } catch (error) {
+        Swal.fire('Error', 'Looks like server having trouble', 'error')
+      }
+    },
+    clearInput () {
+      this.inputCheckPin = {
+        one: '',
+        two: '',
+        three: '',
+        four: '',
+        five: '',
+        six: ''
+      }
+
+      this.inputUpdatePin = {
+        one: '',
+        two: '',
+        three: '',
+        four: '',
+        five: '',
+        six: ''
+      }
+    }
+  },
+  computed: {
+    ...mapGetters(['getUserData'])
   }
 }
 </script>

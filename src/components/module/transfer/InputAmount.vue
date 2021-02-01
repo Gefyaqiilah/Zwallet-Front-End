@@ -20,7 +20,7 @@
         Type the amount you want to transfer and then
 press continue to the next steps.
       </p>
-    <form action=""  v-on:submit="toConfirmation" method="">
+    <form action=""  v-on:submit.prevent="toConfirmation" method="">
     <div class="field-amount">
         <div class="form-group">
           <div class="input-group" style="display:flex; justify-content:center;">
@@ -76,9 +76,9 @@ export default {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
-          text: 'Your balance is not enough :(',
-          footer: '<a href>Why do I have this issue?</a>'
+          text: 'Your balance is not enough :('
         })
+        return this.$router.push('/home')
       } else {
         this.$router.push({
           name: 'Confirmation', query: { idReceiver: this.$route.params.idUser, amount: this.inputAmount, notes: this.inputNotes }

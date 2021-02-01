@@ -1,19 +1,24 @@
 <template>
-<div class="balance-graphic">
+<div class="balance-graphic p-2">
   <div class="income-expense">
-      <div class="income">
+      <div class="income d-flex flex-column align-items-center">
+          <div>
           <img src="/img/arrow-down-green.png" alt="">
+          </div>
           <p class="income-text font-weight-bold">Income</p>
           <p class="amount green font-weight-bold">Rp.{{income(getTransactionHistory.transactions)}}</p>
       </div>
-      <div class="expense">
+      <div class="expense d-flex flex-column align-items-center">
           <img src="/img/arrow-up-red.png" alt="">
           <p class="income-text font-weight-bold">Expense</p>
           <p class="amount red font-weight-bold">Rp.{{expense(getTransactionHistory.transactions)}}</p>
       </div>
   </div>
-  <div class="graphic">
+  <div class="graphic" v-if="getTransactionHistory.chartData.length > 0">
       <column-chart :download="true" :data="[...getTransactionHistory.chartData]"></column-chart>
+  </div>
+  <div class="default-text" v-if="getTransactionHistory.chartData.length === 0">
+    <p>You don't have any transaction data<br/>😥</p>
   </div>
 </div>
 </template>
@@ -103,6 +108,20 @@ export default {
 
 .red {
     color: #FF5B37;
+}
+.income-text {
+  font-size: 17px;
+}
+/* * {
+  border: 1px solid red;
+} */
+.default-text {
+  min-height:200px;
+}
+.default-text p {
+  font-weight:bold;
+  font-size:20px;
+  text-align:center;
 }
 @media screen and (max-width:400px){
 .balance-graphic .graphic img {

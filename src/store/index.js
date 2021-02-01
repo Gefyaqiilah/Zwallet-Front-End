@@ -92,8 +92,8 @@ export default new Vuex.Store({
       context.commit('CLEAR_INTERVAL_SOCKET_IO')
     },
     createPin(context, payload) {
-      const pin = { pin: payload.pin }
       return new Promise((resolve, reject) => {
+        const pin = { pin: payload.pin }
         axios.patch(`${process.env.VUE_APP_SERVICE_API}/v1/users/${payload.id}`, pin, {
           headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
         })
@@ -126,6 +126,18 @@ export default new Vuex.Store({
           .then(results => {
             console.log('results.data.result :>> ', results.data.result)
             context.commit('SET_USERDATA', { ...context.state.userData, pin: results.data.result })
+            resolve(results.data.result)
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
+    async checkPin(context, payload) {
+      return new Promise((resolve, reject) => {
+        context.dispatch('interceptorRequest')
+        axios.post(`${process.env.VUE_APP_SERVICE_API}/v1/users/check-pin`, payload)
+          .then(results => {
             resolve(results.data.result)
           })
           .catch(error => {

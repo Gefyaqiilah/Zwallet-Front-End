@@ -19,7 +19,7 @@
           </div>
       </div>
       <div class="d-flex wrapper-sorry justify-content-center align-items-center" v-if="getTransactionHistory.transactions.length === 0">
-        <p class="text-sorry">You don't have any transaction data</p>
+        <p class="text-sorry">You don't have any transaction data<br/>😥</p>
       </div>
   </div>
 </div>
@@ -67,7 +67,7 @@ export default {
       }
     },
     async handleGetHistory () {
-      await this.getHistory({ limit: 3 })
+      await this.getHistory({ limit: 4 })
     },
     handleDeleteTransactionTransferById (id) {
       if (!localStorage.getItem('accessToken')) {
@@ -218,6 +218,7 @@ export default {
 
 .text-sorry {
   font-weight:bold;
-  font-size:19px;
+  text-align:center;
+  font-size:20px;
 }
 </style>
