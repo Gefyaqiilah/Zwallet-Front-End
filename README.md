@@ -8,7 +8,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End">
-    <img src="./screenshots/logo.png" alt="Logo" width="80">
+    <img src="./screenshots/logo.png"  width="200px" alt="Logo" width="80">
   </a>
 
   <h3 align="center">Zwallet App</h3>
@@ -36,7 +36,7 @@
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
 * [Screenshots](#screenshots)
-* [Related Project](#related-project-backend)
+* [Related Project](#related-project)
 * [Contact](#contact)
 
 
