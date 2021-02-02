@@ -79,7 +79,10 @@ export default {
     ;
     gap: 30px 0;
 }
-
+.change-password-btn:hover {
+  background: #6379f4;
+  color:#ffffff;
+}
 .info-succeed {
     grid-area: info-succeed;
 

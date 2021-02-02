@@ -15,11 +15,11 @@
                   <p class="name">{{transaction.userSender.firstName}}</p>
                   <p class="status">{{getUserData.id === transaction.idSender ? 'Transfer' : 'Receive'}}</p>
               </div>
-              <p :class="getUserData.id === transaction.idSender ? 'red' : 'green'" class="amount">{{getUserData.id === transaction.idSender ? '-' : '+'}} Rp.{{transaction.amount}} <img src="/img/trash.png" v-on:click.prevent="handleDeleteTransactionTransferById(transaction.idTransfer,$event)" :value="transaction.idTransfer" :alt="transaction.idTransfer"></p>
+              <p :class="getUserData.id === transaction.idSender ? 'red' : 'green'" class="amount">{{getUserData.id === transaction.idSender ? '-' : '+'}} Rp.{{transaction.amount}} <img src="/img/trash.png" class="cursor-pointer" v-on:click.prevent="handleDeleteTransactionTransferById(transaction.idTransfer,$event)" :value="transaction.idTransfer" :alt="transaction.idTransfer"></p>
           </div>
       </div>
       <div class="d-flex wrapper-sorry justify-content-center align-items-center" v-if="getTransactionHistory.transactions.length === 0">
-        <p class="text-sorry">You don't have any transaction data<br/>😥</p>
+        <p class="text-sorry">You don't have any transaction data</p>
       </div>
   </div>
 </div>
@@ -220,7 +220,6 @@ export default {
 }
 
 .text-sorry {
-  font-weight:bold;
   text-align:center;
   font-size:20px;
 }

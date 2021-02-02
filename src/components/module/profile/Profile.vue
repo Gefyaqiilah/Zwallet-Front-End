@@ -20,7 +20,7 @@
             name="photo"
             accept="image/png,image/gif,image/jpeg,/image/jpg"
           />
-          <label style="display:block;display:flex;justify-content:center; flex-grow:1;" for="imageUpload"
+          <label class="cursor" style="display:block;display:flex;justify-content:center; flex-grow:1;" for="imageUpload"
             ><div><img src="/img/edit-2.png" alt="" id="" /></div><span style="">Edit</span></label
           >
       </div>

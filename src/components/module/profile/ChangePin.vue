@@ -381,4 +381,8 @@ export default {
 .col-md-9.signup-position p .signup {
     color: #6379F4;
 }
+.change-password-btn:hover {
+  background: #6379f4;
+  color:#ffffff;
+}
 </style>

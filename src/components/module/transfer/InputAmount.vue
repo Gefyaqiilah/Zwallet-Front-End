@@ -39,7 +39,7 @@ press continue to the next steps.
                <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon1"><img src="/img/vector.png" alt=""></span>
                     </div>
-                <input type="text" maxlength="30" id="notes" v-model="inputNotes" class="form-control input-notes shadow-none" placeholder="Add some notes" aria-label="Username" aria-describedby="basic-addon1" required>
+                <input type="text" maxlength="30" id="notes" v-model="inputNotes" class="form-control input-notes shadow-none" placeholder="Add some notes" aria-label="Username" aria-describedby="basic-addon1">
             </div>
           </div>
           <div class="button-continue">

@@ -37,7 +37,7 @@
           </div>
           </div>
       </div>
-      <div class="phone-number">
+      <div class="phone-number d-flex flex-row justify-content-between">
           <div class="side-left">
               <div class="phone-number-title title gap">
                   <p>Phone Number</p>
@@ -87,7 +87,6 @@ export default {
     background: #FFFFFF;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
     border-radius: 25px;
-
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: repeat(2, max-content) max-content repeat(1, max-content);
@@ -128,7 +127,6 @@ export default {
 
 .personal-information-title {
     grid-area: personal-information-title;
-
     display: flex;
 }
 
@@ -234,12 +232,19 @@ export default {
 .how-to .last-name {
     grid-area: last-name;
     display: grid;
-
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
     border-radius: 10px;
     padding-top: 15px;
 }
-
+.first-name p {
+    word-break: break-all;
+}
+.last-name p {
+    word-break: break-all;
+}
+.verified-email p {
+    word-break: break-all;
+}
 .how-to .verified-email {
     grid-area: verified-email;
     display: grid;
@@ -292,6 +297,25 @@ export default {
 @media screen and (max-width:400px){
   .bold p{
     font-size:0.8em !important;
+  }
+  .first-name p {
+      text-align: left;
+      font-size: 0.8em;
+  }
+  .personal-information {
+    grid-template-columns: 100% !important;
+  }
+  .first-name {
+    flex-direction: column;
+  }
+  .last-name {
+    flex-direction: column;
+  }
+  .email-verified {
+    flex-direction: column;
+  }
+  .phone-number {
+    flex-direction: column !important;
   }
 }
 </style>

@@ -188,7 +188,10 @@ input::-webkit-inner-spin-button {
 
     color: #88888F;
 }
-
+.btn-confirm:hover {
+  background: #6379f4;
+  color:#ffffff;
+}
 .col-md-9.signup-position {
     font-style: normal;
     font-weight: 700;

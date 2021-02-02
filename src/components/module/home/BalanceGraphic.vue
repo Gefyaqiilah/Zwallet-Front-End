@@ -18,7 +18,7 @@
       <column-chart :download="true" :data="[...getTransactionHistory.chartData]"></column-chart>
   </div>
   <div class="default-text" v-if="getTransactionHistory.chartData.length === 0">
-    <p>You don't have any transaction data<br/>😥</p>
+    <p>You don't have any transaction data</p>
   </div>
 </div>
 </template>
@@ -119,7 +119,6 @@ export default {
   min-height:200px;
 }
 .default-text p {
-  font-weight:bold;
   font-size:20px;
   text-align:center;
 }

@@ -321,4 +321,8 @@ export default {
 .col-md-9.signup-position p .signup {
   color: #6379f4;
 }
+.btn-signup:hover {
+  background: #6379f4;
+  color:#ffffff;
+}
 </style>

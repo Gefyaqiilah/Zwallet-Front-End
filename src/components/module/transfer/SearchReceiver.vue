@@ -15,7 +15,7 @@
   <div v-if="!search" class="list-receiver">
     <div v-for="listReceiver in userReceiver" :key="listReceiver.id" class="receiver">
         <div class="thumbnail-photo">
-            <img class="photo" :src="listReceiver.photo === null? '/img/user-avatar.png' :listReceiver.photo" :alt="listReceiver.firstName + ' Foto'">
+            <img class="photo" :src="!listReceiver.photo? '/img/user-avatar.png' :listReceiver.photo" :alt="listReceiver.firstName + ' Foto'">
         </div>
         <div class="detail-username">
             <p class=""><router-link class="username" :to="'/home/inputamount/'+listReceiver.id">{{listReceiver.firstName +' '}}{{listReceiver.lastName !==null ? listReceiver.lastName : ''}}</router-link></p>

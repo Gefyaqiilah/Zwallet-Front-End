@@ -170,12 +170,11 @@ export default {
   line-height: 23px;
   color: rgba(169, 169, 169, 0.8) !important;
 }
-.form-control {
-  border:none !important;
-}
 .input-group-text {
   border:none !important;
   border-radius: 0 !important;
+  border-bottom: 1.5px solid rgba(169, 169, 169, 0.6) !important;
+  background:#ffffff;
 }
 
 .input-group-prepend {
@@ -244,5 +243,9 @@ export default {
 .col-md-9.signup-position p .signup {
   color: #6379f4;
   cursor: pointer;
+}
+.btn-login:hover {
+  background: #6379f4;
+  color:#ffffff;
 }
 </style>
