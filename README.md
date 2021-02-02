@@ -8,7 +8,7 @@
 <img src="https://img.shields.io/github/repo-size/Gefyaqiilah/Zwallet-Front-End?color=%20%236379f4&label=Repo%20SIZE&logo=%20%236379f4&logoColor=%20%236379f4&style=for-the-badge">
  <img src="https://img.shields.io/badge/Vue-v2-green?style=for-the-badge">
   <img src="https://img.shields.io/badge/Bootstrap-v4-lightgreen?style=for-the-badge">
-   <img src="https://img.shields.io/badge/Bootstrap-v4-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/gefyaqiilahaqshal">
+   <img src="https://img.shields.io/badge/LinkedIn-v4-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/gefyaqiilahaqshal">
 </p>
 
 <p align="center">
