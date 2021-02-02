@@ -51,7 +51,7 @@ Zwallet is an electronic money or digital wallet. You can send money to the user
 ### Built With
 
 * [Vue v2](https://vuejs.org/v2)
-* [Vue Bootstrap](https://bootstrap-vue.org/)
+* [Bootstrap v4](https://getbootstrap.com/docs/4.6/getting-started/introduction/)
 
 
 <!-- GETTING STARTED -->
