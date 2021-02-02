@@ -4,10 +4,14 @@
 *** an issue with the tag "enhancement".
 *** Thanks again! Now go create something AMAZING! :D
 -->
-  ![REPO SIZE](https://img.shields.io/github/repo-size/Gefyaqiilah/Zwallet-Front-End?color=%20%236379f4&label=Repo%20SIZE&logo=%20%236379f4&logoColor=%20%236379f4&style=for-the-badge)
+<p align="center">
+<img src="https://img.shields.io/github/repo-size/Gefyaqiilah/Zwallet-Front-End?color=%20%236379f4&label=Repo%20SIZE&logo=%20%236379f4&logoColor=%20%236379f4&style=for-the-badge"
+</p>
+<!--   ![REPO SIZE](https://img.shields.io/github/repo-size/Gefyaqiilah/Zwallet-Front-End?color=%20%236379f4&label=Repo%20SIZE&logo=%20%236379f4&logoColor=%20%236379f4&style=for-the-badge)
 ![Vue](https://img.shields.io/badge/Vue-v2-green?style=for-the-badge)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-v4-lightgreen?style=for-the-badge)
-[![LinkedIn](https://img.shields.io/badge/Bootstrap-v4-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/gefyaqiilahaqshal)
+[![LinkedIn](https://img.shields.io/badge/Bootstrap-v4-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/gefyaqiilahaqshal) -->
+  
 <p align="center">
   <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End">
     <img src="./screenshots/logo.png"  width="200px" alt="Logo" width="80">
