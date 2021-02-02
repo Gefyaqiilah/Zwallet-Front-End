@@ -1,48 +1,131 @@
-# zwallet
+<!--
+*** Thanks for checking out this README Template. If you have a suggestion that would
+*** make this better, please fork the repo and create a pull request or simply open
+*** an issue with the tag "enhancement".
+*** Thanks again! Now go create something AMAZING! :D
+-->
 
-repo ini berisi project zwallet front-end, zwallet ini hanya terkoneksi dengan server https://api-zwallet-gefy.fwdev.online, yang sebelumnya dibuat di z-wallet back-end.
-dizwallet ini memungkinkan users untuk :
+<br />
+<p align="center">
+  <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End">
+    <img src="./screenshots/logo.png" alt="Logo" width="80">
+  </a>
 
-1.  <b>sign up</b>
-2.  <b>sign in</b>
-3.  <b>transfer</b>
-4.  <b>cek history transfer</b>
-5.  dll
-## DEMO PROJECT
-https://zwallet-gefy.fwdev.online
-## ZWALLET - BACK END
-https://github.com/Gefyaqiilah/Zwallet-Back-End
-## Screenshot zwallet 
-![Screenshot (447)](https://user-images.githubusercontent.com/54069791/100554060-da288700-32c4-11eb-9abb-6dcbfe92fa6d.png)
-![Screenshot (448)](https://user-images.githubusercontent.com/54069791/100554064-ddbc0e00-32c4-11eb-817c-ca5e546a44ef.png)
-![Screenshot (449)](https://user-images.githubusercontent.com/54069791/100554065-e280c200-32c4-11eb-8617-214bd5c35807.png)
-![Screenshot (452)](https://user-images.githubusercontent.com/54069791/100554070-ef9db100-32c4-11eb-9ade-a82e87c128ea.png)
+  <h3 align="center">Zwallet App</h3>
+
+  <p align="center">
+    Transactions made easy with Zwallet
+    <br />
+    <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://zwallet-gefy.netlify.app">View Demo</a>
+    ·
+    <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End">Report Bug</a>
+    ·
+    <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End">Request Feature</a>
+  </p>
+</p>
+
+<!-- TABLE OF CONTENTS -->
+## Table of Contents
+
+* [About the Project](#about-the-project)
+  * [Built With](#built-with)
+* [Getting Started](#getting-started)
+  * [Prerequisites](#prerequisites)
+  * [Installation](#installation)
+* [Screenshots](#screenshots)
+* [Related Project](#related-project-backend)
+* [Contact](#contact)
 
 
-## Project setup
 
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
+
+
+Zwallet is an electronic money or digital wallet. You can send money to the user's wallet by finding out the contact information of the user you want to send.
+
+### Built With
+
+* [Vue v2](https://vuejs.org/v2)
+* [Vue Bootstrap](https://bootstrap-vue.org/)
+
+
+<!-- GETTING STARTED -->
+## Getting Started
+
+### Prerequisites
+
+Before going to the installation stage there are some software that must be installed first.
+
+* [NodeJs](https://nodejs.org/en/download/)
+
+### Installation
+
+If you want to run this project locally, I recommend you to configure the [Back-End](https://github.com/Gefyaqiilah/Zwallet-Back-End) first before configuring this repo front-end.
+1. Clone the repo
+```sh
+git clone https://github.com/Gefyaqiilah/Zwallet-Front-End.git
+```
+2. Install NPM packages
 ```
 npm install
 ```
-
-### Compiles and hot-reloads for development
-
+3. Add .env file at root folder project, and add following
+```sh
+VUE_APP_SERVICE_API = YOUR_HOST_NAME
+VUE_APP_JWT_KEY = YOUR_JWT_KEY
 ```
-npm run serve
+4. Run the project
 ```
-
-### Compiles and minifies for production
-
-```
-npm run build
+  npm run serve
 ```
 
-### Lints and fixes files
 
-```
-npm run lint
-```
 
-### Customize configuration
+<!-- ROADMAP -->
+## Screenshots
 
-See [Configuration Reference](https://cli.vuejs.org/config/).
+<p align='center'>
+  <span>
+      <image width="200" src='./screenshots/landing-page.png' />
+      <image width="200" src='./screenshots/register.png' />
+      <image width="200" src='./screenshots/login.png' />
+      <image width="200" src='./screenshots/create-pin.png' />
+      <image width="200" src='./screenshots/home.png' />
+      <image width="200" src='./screenshots/profile.png' />
+      <image width="200" src='./screenshots/personal-information.png' />
+      <image width="200" src='./screenshots/top-up.png' />
+      <image width="200" src='./screenshots/search-receiver.png' />
+      <image width="200" src='./screenshots/transfer-information.png' />
+      <image width="200" src='./screenshots/input-pin.png' />
+      <image width="200" src='./screenshots/transfer-success.png' />
+     
+
+<!-- CONTRIBUTING -->
+## Contributing
+
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+
+
+## Related Project
+- [Zwallet Back-End](https://github.com/Gefyaqiilah/Zwallet-Back-End)
+
+
+<!-- CONTACT -->
+## Contact
+
+- Email - gefyaqiilah26@gmail.com
+- LinkedIn - [@GefyAqiilahAqshal](https://linkedin.com/in/gefyaqiilahaqshal)
+
+
