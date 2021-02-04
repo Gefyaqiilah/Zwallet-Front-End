@@ -7,7 +7,6 @@
 <img src="https://img.shields.io/github/repo-size/Gefyaqiilah/Zwallet-Front-End?color=%20%236379f4&label=Repo%20SIZE&logo=%20%236379f4&logoColor=%20%236379f4&style=flat">
  <a href="https://vuejs.org/"><img src="https://img.shields.io/badge/Vue-v2-green?style=flat"></a>
  <a href="https://getbootstrap.com/docs/4.6/getting-started/introduction"><img src="https://img.shields.io/badge/Bootstrap-v4-lightgreen?style=flat"></a>
-   <a href="https://linkedin.com/in/gefyaqiilahaqshal"><img src="https://img.shields.io/badge/LinkedIn-gefy-blue?style=flat&logo=linkedin"></a>
 </p>
 
   <p align="center">
