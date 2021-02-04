@@ -11,8 +11,9 @@
 
   <p align="center">
   Transactions made easy with Zwallet
+  <br/>
     <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End"><strong>Explore the docs »</strong></a>
-    <br />
+    <br /><br/>
     <a href="https://zwallet-gefy.netlify.app">View Demo</a>
     ·
     <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End">Report Bug</a>
