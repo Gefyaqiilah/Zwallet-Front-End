@@ -1,7 +1,6 @@
-
 <p align="center">
   <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End">
-    <img src="./screenshots/logo.png"  width="250px" alt="Logo" width="80">
+    <img src="./screenshots/logo.png"  width="300px" alt="Logo" width="80">
   </a>
 </p>
 <p align="center">
@@ -15,7 +14,6 @@
     Transactions made easy with Zwallet
     <br />
     <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End"><strong>Explore the docs »</strong></a>
-    <br />
     <br />
     <a href="https://zwallet-gefy.netlify.app">View Demo</a>
     ·
