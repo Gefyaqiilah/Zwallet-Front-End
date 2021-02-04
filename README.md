@@ -6,8 +6,6 @@
 <p align="center">    Transactions made easy with Zwallet</p>
 
   <p align="center">
-    <br />
-  <br/>
     <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End"><strong>Explore the docs »</strong></a>
     <br />
     <a href="https://zwallet-gefy.netlify.app">View Demo</a>
