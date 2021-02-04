@@ -1,11 +1,7 @@
-<!--
-*** Thanks for checking out this README Template. If you have a suggestion that would
-*** make this better, please fork the repo and create a pull request or simply open
-*** an issue with the tag "enhancement".
-*** Thanks again! Now go create something AMAZING! :D
--->
+<h1 align="center">Zwallet App</h1>
+
 <p align="center">
-<img src="https://img.shields.io/github/repo-size/Gefyaqiilah/Zwallet-Front-End?color=%20%236379f4&label=Repo%20SIZE&logo=%20%236379f4&logoColor=%20%236379f4&style=for-the-badge">
+<img src="https://img.shields.io/github/repo-size/Gefyaqiilah/Zwallet-Front-End?color=%20%236379f4&label=Repo%20SIZE&logo=%20%236379f4&logoColor=%20%236379f4&style=flat">
  <a href="https://vuejs.org/"><img src="https://img.shields.io/badge/Vue-v2-green?style=flat"></a>
  <a href="https://getbootstrap.com/docs/4.6/getting-started/introduction"><img src="https://img.shields.io/badge/Bootstrap-v4-lightgreen?style=flat"></a>
    <a href="https://linkedin.com/in/gefyaqiilahaqshal"><img src="https://img.shields.io/badge/LinkedIn-gefy-blue?style=flat&logo=linkedin"></a>
@@ -15,8 +11,6 @@
   <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End">
     <img src="./screenshots/logo.png"  width="200px" alt="Logo" width="80">
   </a>
-
-  <h3 align="center">Zwallet App</h3>
 
   <p align="center">
     Transactions made easy with Zwallet
