@@ -15,7 +15,7 @@
     <a href="https://github.com/Gefyaqiilah/Zwallet-Front-End">Request Feature</a>
   </p>
 <p align="center">
-<img src="https://img.shields.io/github/repo-size/Gefyaqiilah/Zwallet-Front-End?color=%20%236379f4&label=Repo%20SIZE&logo=%20%236379f4&logoColor=%20%236379f4&style=flat">
+<img src="https://img.shields.io/github/repo-size/Gefyaqiilah/Zwallet-Front-End?label=Repo%20Size">
  <a href="https://vuejs.org/"><img src="https://img.shields.io/badge/Vue-v2-green?style=flat"></a>
  <a href="https://getbootstrap.com/docs/4.6/getting-started/introduction"><img src="https://img.shields.io/badge/Bootstrap-v4-lightgreen?style=flat"></a>
 </p>
